@@ -1,0 +1,122 @@
+import { Region, PlayState, Track, Send } from "./State";
+
+interface Setters {
+  setPlayState(state: PlayState): void;
+  setCurrentTime(time: number): void;
+  setRegions(regions: Region[]): void;
+  setTracks(tracks: Track[]): void;
+  setSends(sends: Send[]): void;
+}
+
+export function onReply(
+  result: string,
+  { setPlayState, setCurrentTime, setRegions, setTracks, setSends }: Setters
+) {
+  let regionStrings: string[][] = [];
+
+  let tracks: Track[] = [];
+  let hasTracks = false;
+
+  let sends: Send[] = [];
+  let hasSends = false;
+
+  const lines = result.split("\n");
+  for (let line of lines) {
+    var tokens = line.split("\t");
+    if (tokens.length == 0) {
+      continue;
+    }
+
+    switch (tokens[0]) {
+      case "TRANSPORT": {
+        if (tokens.length < 5) {
+          continue;
+        }
+
+        setCurrentTime(parseFloat(tokens[2]));
+        setPlayState(
+          ((state) => {
+            if (state & 1) return PlayState.Playing;
+            if (state & 2) return PlayState.Paused;
+            return PlayState.Stopped;
+          })(parseInt(tokens[1]))
+        );
+
+        break;
+      }
+      case "REGION_LIST": {
+        regionStrings = [];
+        break;
+      }
+      case "REGION": {
+        regionStrings.push(tokens);
+        break;
+      }
+      case "REGION_LIST_END": {
+        const newRegions = regionStrings.map(
+          ([_cmd, name, id, startTime, endTime, color]) => ({
+            name,
+            id: parseInt(id),
+            startTime: parseFloat(startTime),
+            endTime: parseFloat(endTime),
+            color: parseInt(color),
+          })
+        );
+
+        setRegions(newRegions);
+        break;
+      }
+      case "TRACK": {
+        hasTracks = true;
+        let [
+          _,
+          id,
+          name,
+          _flags,
+          volume,
+          _pan,
+          last_meter_peak,
+          _last_meter_pos,
+          _width,
+          _panmode,
+          _sendCount,
+          receiveCount,
+          hwOutCount,
+          color,
+        ] = tokens;
+
+        tracks.push({
+          id: parseInt(id),
+          name,
+          volume: parseFloat(volume),
+          peakVolume: parseFloat(last_meter_peak),
+          color,
+          receiveCount: parseInt(receiveCount),
+          isOutput: hwOutCount != "0" && receiveCount != "0",
+        });
+
+        break;
+      }
+      case "SEND": {
+        hasSends = true;
+        let [_, trackTo, index, flags, volume, _pan, trackFrom] = tokens;
+
+        sends.push({
+          index,
+          trackFrom: parseInt(trackFrom),
+          trackTo: parseInt(trackTo),
+          volume: parseFloat(volume),
+          mute: (parseInt(flags) & 8) != 0,
+        });
+      }
+    }
+  }
+
+  if (hasTracks) {
+    setTracks(tracks);
+  }
+
+  if (hasSends) {
+    setSends(sends);
+  }
+}

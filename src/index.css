@@ -2,22 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type="range"]::range-lower {
-    background: #3f83f8;
-    border-radius: 30px 0 0 30px;
-    height: 0.25em;
-}
+@layer components {
+  .btn-primary {
+    @apply px-4
+            py-2
+            text-sm
+            font-medium 
+            text-gray-900 
+            bg-white
+            border-gray-200
+            hover:bg-gray-100
+            hover:text-blue-700
+            focus:z-10
+            focus:ring-2
+            focus:ring-blue-700
+            focus:text-blue-700
+            dark:bg-gray-700
+            dark:border-gray-600
+            dark:text-white
+            dark:hover:text-white
+            dark:hover:bg-gray-600
+            dark:focus:ring-blue-500
+            dark:focus:text-white;
+  }
+  .btn-primary.selected {
+    @apply bg-gray-200
+            text-blue-800
+            dark:text-white
+            dark:bg-gray-500;
+  }
+  .btn-outlined {
+    @apply py-2.5
+            px-5
+            font-medium
+            text-sm
+            text-gray-900
+            focus:outline-none
+            bg-white
+            rounded-lg
+            border
+            border-gray-200
+            hover:bg-gray-100
+            hover:text-blue-700
+            focus:z-10
+            focus:ring-4
+            focus:ring-gray-200
+            dark:focus:ring-gray-700
+            dark:bg-gray-800
+            dark:text-gray-400
+            dark:border-gray-600
+            dark:hover:text-white
+            dark:hover:bg-gray-700;
+  }
 
-input[type="range"].range-lg::range-thumb {
-    height: 1.5rem;
-    width: 1.5rem;
-}
+  .btn-outlined.selected {
+    @apply bg-gray-100
+            text-blue-700
+            dark:text-white
+            dark:bg-gray-700;
+  }
 
-input[type="range"]::range-thumb {
-    background: #1c64f2;
-    border: 0;
-    border-radius: 30px;
-    cursor: pointer;
-    height: 1.25rem;
-    width: 1.25rem;
+  .btn-outlined-red {
+    @apply py-2.5
+            px-5
+            font-medium
+            text-sm
+            focus:outline-none
+            text-white
+            bg-red-700
+            hover:bg-red-800
+            focus:ring-4
+            focus:ring-red-300
+            rounded-lg
+            border
+            border-gray-300
+            dark:border-gray-600
+            dark:hover:border-gray-600
+            dark:bg-red-600
+            dark:hover:bg-red-700
+            dark:focus:ring-red-900;
+  }
 }

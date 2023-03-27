@@ -1,0 +1,42 @@
+
+name: Build and publish
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - id: release
+      uses: rymndhng/release-on-push-action@v0.27.0
+      with:
+        bump_version_scheme: minor
+        use_github_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+    - name: Changelog
+      run: |
+        node .github/changelog.js > CHANGELOG.md
+      env:
+        COMMITS: ${{ toJSON(github.event.commits) }}
+        ID: ${{ toJSON(github.event.head_commit.id) }}
+    - run: npm ci
+    - run: npm run build
+    - run: mv dist/index.html dist/remote-bandui.html
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.release.outputs.tag_name }}
+        files: |
+          dist/remote-bandui.html
+          Mother Project.RPP
+          LICENSE
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
