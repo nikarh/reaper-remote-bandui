@@ -30,22 +30,34 @@ export function Mix() {
 
   const outputTracks = createMemo(() => {
     const _bindingHack = Object.keys(tracks)[0];
-    return unwrap(tracks)
+    const result = unwrap(tracks)
       .map((t, index) => [index, t.isOutput] as [number, boolean])
       .filter(([_, isOutput]) => isOutput)
       .map(([index]) => tracks[index]);
+    return result;
   });
 
   const outputTrack = () => {
+    const _bindingHack = Object.keys(tracks)[0];
     return outputTracks()[output()];
+  };
+
+  const trackSends = () => {
+    const _bindingHack = Object.keys(sends)[0];
+    return sends.filter((s) => s.trackTo == outputTrack().id);
   };
 
   createEffect(() => {
     const track = outputTracks()[output()];
+    if (track == null) {
+      return;
+    }
+
     let command = [...Array(track.receiveCount)]
       .map((_, i) => `GET/TRACK/${track.id}/SEND/-${i + 1}`)
       .join(";");
-    onCleanup(subscribe(command, 200));
+
+    onCleanup(subscribe(command, 500));
   });
 
   return (
@@ -65,7 +77,7 @@ export function Mix() {
             setOutputVolume(outputTrack().id, volume);
           }}
         />
-        <For each={sends}>
+        <For each={trackSends()}>
           {(send) => (
             <SendControl
               send={send}

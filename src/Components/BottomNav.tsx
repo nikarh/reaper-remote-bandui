@@ -24,6 +24,24 @@ export function BottomNav(p: {
       <div class="grid h-full max-w-lg grid-cols-2 mx-auto">
         <button
           type="button"
+          onClick={() => p.onSelected(Section.Mix)}
+          class={p.section == Section.Mix ? selectedClass : selectableClass}
+        >
+          <Icons.Mix
+            class={
+              p.section == Section.Mix ? textSelectedClass : textSelectableClass
+            }
+          />
+          <span
+            class={`text-sm  ${
+              p.section == Section.Mix ? textSelectedClass : textSelectableClass
+            }`}
+          >
+            Mix
+          </span>
+        </button>
+        <button
+          type="button"
           onClick={() => p.onSelected(Section.Control)}
           class={p.section == Section.Control ? selectedClass : selectableClass}
         >
@@ -42,24 +60,6 @@ export function BottomNav(p: {
             }`}
           >
             Control
-          </span>
-        </button>
-        <button
-          type="button"
-          onClick={() => p.onSelected(Section.Mix)}
-          class={p.section == Section.Mix ? selectedClass : selectableClass}
-        >
-          <Icons.Mix
-            class={
-              p.section == Section.Mix ? textSelectedClass : textSelectableClass
-            }
-          />
-          <span
-            class={`text-sm  ${
-              p.section == Section.Mix ? textSelectedClass : textSelectableClass
-            }`}
-          >
-            Mix
           </span>
         </button>
       </div>

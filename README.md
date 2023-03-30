@@ -16,12 +16,13 @@ This project aims to fix that by providing a mobile-first web UI that provides a
 ## Repository contents
 
 This repository contains
+
 - Source code for REAPER remote control web UI
   | Control | Mix |
   | --- | --- |
   | ![Screenshot of a Control tab](./screenshots/Web%20-%20Control.png) | ![Screenshot of a Mix tab](./screenshots/Web%20-%20Mix.png) |
 - `Mother Project.RPP` - A sample reaper project that can be used with this UI
-  
+
   ![Screenshot of a REAPER project](./screenshots/Reaper%20Project.png)
 
 ## Remote UI
@@ -44,10 +45,12 @@ This project does not have a mock backend, so you actually need to run REAPER wi
 By default proxy server expects REAPER to be running on port `8881`.
 
 ## REAPER project layout
+
 For this UI to work, your REAPER project must follow some rules.
 
 1. All songs are marked as regions from the beginning to the end. The region must have a name.
 2. Tracks for which mixing is possible must have both
+
    - A hardware output
    - At least one send
 

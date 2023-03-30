@@ -101,44 +101,65 @@ export function ReaperProvider(p: ReaperProps) {
     actions: {
       subscribe: client.subscribe,
       play() {
-        client.once("1007;TRANSPORT");
+        client.run({ type: "Play" }, false);
       },
       pause() {
         if (playState() == PlayState.Playing) {
-          client.once("1008;TRANSPORT");
+          client.run({ type: "Pause" }, false);
         }
       },
       stop() {
-        client.once("40667;TRANSPORT");
+        client.run({ type: "Stop" }, false);
       },
       moveToRegion(region) {
-        client.once(`SET/POS/${region.startTime};TRANSPORT`, true);
+        client.run({ type: "Move", pos: region.startTime }, false);
       },
       setOutputVolume(id, volume) {
+        client.run({ type: "SetTrackVolume", track: id, volume }, true);
         setTracks(
           (track) => track.id === id,
           produce((state) => {
             state.volume = volume;
           })
         );
-        client.once(`SET/TRACK/${id}/VOL/${volume}`, true);
       },
       setSendVolume(send, volume) {
+        client.run(
+          {
+            type: "SetSendVolume",
+            track: send.trackTo,
+            send: send.index,
+            volume,
+          },
+          true
+        );
         setSends(
-          (s) => s === send,
+          (s) =>
+            s.index === send.index &&
+            s.trackFrom == s.trackFrom &&
+            s.trackTo == s.trackTo,
           produce((state) => {
             state.volume = volume;
           })
         );
-        client.once(
-          `SET/TRACK/${send.trackTo}/SEND/${send.index}/VOL/${volume}`,
-          true
-        );
       },
       toggleSendMute(send) {
-        client.once(
-          `SET/TRACK/${send.trackTo}/SEND/${send.index}/MUTE/-1`,
+        client.run(
+          {
+            type: "ToggleSendMute",
+            track: send.trackTo,
+            send: send.index,
+          },
           true
+        );
+        setSends(
+          (s) =>
+            s.index === send.index &&
+            s.trackFrom == s.trackFrom &&
+            s.trackTo == s.trackTo,
+          produce((state) => {
+            state.mute = !state.mute;
+          })
         );
       },
     },

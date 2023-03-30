@@ -1,19 +1,28 @@
-input[type="range"]::range-lower {
-  background: #3f83f8;
-  border-radius: 30px 0 0 30px;
-  height: 0.25em;
+input[type="range"],
+input[type="range"]::-webkit-slider-runnable-track,
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
 }
 
-input[type="range"].range-lg::range-thumb {
-  height: 1.5rem;
-  width: 1.5rem;
+input[type="range"]:active {
+  cursor: grabbing;
 }
 
-input[type="range"]::range-thumb {
-  background: #1c64f2;
+input[type="range"]::-webkit-slider-thumb {
+  width: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
   border: 0;
-  border-radius: 30px;
-  cursor: pointer;
-  height: 1.25rem;
-  width: 1.25rem;
+  width: 0;
+}
+
+.range .range-progress-body {
+  transition: all ease 100ms;
+}
+
+@media (hover) {
+  .range:hover .range-progress-body {
+    filter: brightness(140%);
+  }
 }

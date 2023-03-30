@@ -8,6 +8,11 @@ interface Setters {
   setSends(sends: Send[]): void;
 }
 
+function colorToRgba(color: string): string {
+  let parsed = (parseInt(color) | 0x1000000).toString(16);
+  return `#${parsed.substring(parsed.length - 6)}`;
+}
+
 export function onReply(
   result: string,
   { setPlayState, setCurrentTime, setRegions, setTracks, setSends }: Setters
@@ -59,7 +64,7 @@ export function onReply(
             id: parseInt(id),
             startTime: parseFloat(startTime),
             endTime: parseFloat(endTime),
-            color: parseInt(color),
+            color: colorToRgba(color),
           })
         );
 
@@ -90,7 +95,7 @@ export function onReply(
           name,
           volume: parseFloat(volume),
           peakVolume: parseFloat(last_meter_peak),
-          color,
+          color: colorToRgba(color),
           receiveCount: parseInt(receiveCount),
           isOutput: hwOutCount != "0" && receiveCount != "0",
         });

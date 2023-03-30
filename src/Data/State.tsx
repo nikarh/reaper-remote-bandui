@@ -27,5 +27,5 @@ export interface Region {
   name: string;
   startTime: number;
   endTime: number;
-  color: number;
+  color: string;
 }

@@ -49,7 +49,7 @@ const Stop = (
   </svg>
 );
 
-const Control = (p: { class: string }) => (
+const Control = (p: { class?: string }) => (
   <svg
     class={`w-6 h-6 mb-1 ${p.class}`}
     aria-hidden="true"
@@ -67,7 +67,7 @@ const Control = (p: { class: string }) => (
   </svg>
 );
 
-const Mix = (p: { class: string }) => (
+const Mix = (p: { class?: string }) => (
   <svg
     class={`w-6 h-6 mb-1 ${p.class}`}
     aria-hidden="true"

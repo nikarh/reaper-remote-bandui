@@ -1,44 +1,77 @@
+import { Action, actionsToCommands, reduceActions } from "./Actions";
+
 interface Subscription {
   subscribe(request: string, interval: number): () => void;
-  once(request: String, immediate: boolean): void;
-  once(request: String): void;
+  run(action: Action, optimistic: boolean): void;
 }
 
 export function initializeClient(
   interval: number,
   onReply: (data: string) => void
 ): [Subscription, () => void] {
+  let unmount = false;
+  let ignoreResults = false;
+  let delaySubscriptions: number | undefined = undefined;
+
   let subscriptions: [string, number, number][] = [];
-  let nextCommands: string[] = [];
-  let ignoreResult = true;
+  let actionQueue: Action[] = [];
+  let timer: number | undefined = undefined;
 
-  async function run() {
-    ignoreResult = false;
-    let commands = nextCommands.join(";");
+  let promises = Promise.resolve();
+
+  async function runQueue() {
+    let command = actionsToCommands(reduceActions(actionQueue));
+    actionQueue = [];
+    if (command != "") {
+      try {
+        let result = await fetch(`/_/${command}`);
+        let text = await result.text();
+        if (!unmount) {
+          onReply(text);
+          delaySubscriptions = new Date().getTime() + 50;
+        }
+      } catch (e) {
+        throw e;
+      }
+    }
+
+    ignoreResults = false;
+  }
+
+  async function runSubscriptions() {
+    let commands = "";
     let now = new Date().getTime();
-    for (let sub of subscriptions) {
-      if (sub[2] < now) {
-        sub[2] = now + sub[1];
-        commands += `;${sub[0]}`;
+
+    if (delaySubscriptions == null || now > delaySubscriptions) {
+      delaySubscriptions = undefined;
+      for (let sub of subscriptions) {
+        if (now > sub[2]) {
+          sub[2] = now + sub[1];
+          commands += `;${sub[0]}`;
+        }
       }
     }
 
-    if (commands == "") {
-      return;
+    if (commands != "") {
+      try {
+        let result = await fetch(`/_/${commands}`);
+        let text = await result.text();
+        if (!ignoreResults && !unmount) {
+          onReply(text);
+        }
+      } catch (e) {
+        throw e;
+      }
     }
 
-    // Cleanup next commands to prevent race
-    const nextCommandsBackup = nextCommands;
-    nextCommands = [];
-    try {
-      let result = await fetch(`/_/${commands}`);
-      let text = await result.text();
-      if (!ignoreResult) {
-        onReply(text);
-      }
-    } catch (e) {
-      nextCommands = nextCommandsBackup;
-      throw e;
+    if (!unmount) {
+      timer = setTimeout(() => {
+        promises = promises.then(() =>
+          runSubscriptions().catch((e) => {
+            console.log("Request failed", e);
+          })
+        );
+      }, interval);
     }
   }
 
@@ -58,30 +91,36 @@ export function initializeClient(
     };
   }
 
-  function once(request: string, immediate: boolean = false) {
-    nextCommands.push(request);
-    if (immediate) {
-      ignoreResult = true;
-      run().catch((e) => {
-        console.log("Request failed", e);
-      });
+  function run(action: Action, optimistic: boolean) {
+    if (optimistic) {
+      ignoreResults = true;
+    }
+
+    actionQueue.push(action);
+    if (actionQueue.length == 1) {
+      promises = promises.then(() =>
+        runQueue().catch((e) => {
+          console.log("Request failed", e);
+        })
+      );
     }
   }
 
-  let intervalRef = setInterval(() => {
-    run().catch((e) => {
-      console.log("Request failed", e);
-    });
-  }, interval);
+  promises = runSubscriptions().catch((e) => {
+    console.log("Request failed", e);
+  });
 
   return [
     {
-      once,
+      run,
       subscribe,
     },
     () => {
-      clearInterval(intervalRef);
-      ignoreResult = true;
+      if (timer != undefined) {
+        clearTimeout(timer);
+      }
+      ignoreResults = true;
+      unmount = true;
     },
   ];
 }

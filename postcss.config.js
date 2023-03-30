@@ -1,7 +1,7 @@
 module.exports = {
   plugins: {
+    "postcss-input-range": {},
     tailwindcss: {},
     autoprefixer: {},
-    "postcss-input-range": {},
   },
 };
