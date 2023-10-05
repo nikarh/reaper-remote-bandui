@@ -1,4 +1,10 @@
-# What is this?
+# reaper-remote-bandui
+
+[![License](https://img.shields.io/github/license/nikarh/reaper-remote-bandui.svg)](https://github.com/nikarh/reaper-remote-bandui)
+[![GitHub Actions Build Status](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yml/badge.svg)](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yml)
+[![Current Release](https://img.shields.io/github/release/nikarh/reaper-remote-bandui.svg)](https://github.com/nikarh/reaper-remote-bandui/releases)
+[![Release RSS Feed](https://img.shields.io/badge/rss-releases-ffa500?logo=rss)](https://github.com/nikarh/reaper-remote-bandui/releases.atom)
+[![Main Commits RSS Feed](https://img.shields.io/badge/rss-commits-ffa500?logo=rss)](https://github.com/nikarh/reaper-remote-bandui/commits/main.atom)
 
 My musical band uses an IEM setup for rehearsals and live shows.
 This setup is based on a [USB audio interface](https://www.behringer.com/product.html?modelCode=P0B2J) and software mixing in [REAPER](https://www.reaper.fm/).
