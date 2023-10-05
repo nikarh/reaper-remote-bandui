@@ -1,7 +1,7 @@
 # reaper-remote-bandui
 
 [![License](https://img.shields.io/github/license/nikarh/reaper-remote-bandui.svg)](https://github.com/nikarh/reaper-remote-bandui)
-[![GitHub Actions Build Status](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yml/badge.svg)](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yml)
+[![GitHub Actions Build Status](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yaml/badge.svg)](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yaml)
 [![Current Release](https://img.shields.io/github/release/nikarh/reaper-remote-bandui.svg)](https://github.com/nikarh/reaper-remote-bandui/releases)
 [![Release RSS Feed](https://img.shields.io/badge/rss-releases-ffa500?logo=rss)](https://github.com/nikarh/reaper-remote-bandui/releases.atom)
 [![Main Commits RSS Feed](https://img.shields.io/badge/rss-commits-ffa500?logo=rss)](https://github.com/nikarh/reaper-remote-bandui/commits/main.atom)
