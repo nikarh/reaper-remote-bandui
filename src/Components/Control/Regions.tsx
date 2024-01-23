@@ -19,7 +19,7 @@ export function Regions() {
 
   const isPlaying = createSelector(
     currentTime,
-    (r: Region, t) => t >= Math.floor(r.startTime) && t <= Math.ceil(r.endTime)
+    (r: Region, t) => t >= Math.floor(r.startTime) && t <= Math.ceil(r.endTime),
   );
 
   const progress = (r: Region) =>
@@ -27,8 +27,8 @@ export function Regions() {
       0,
       Math.min(
         100,
-        ((currentTime() - r.startTime) / (r.endTime - r.startTime)) * 100
-      )
+        ((currentTime() - r.startTime) / (r.endTime - r.startTime)) * 100,
+      ),
     );
 
   return (

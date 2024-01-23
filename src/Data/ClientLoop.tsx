@@ -7,7 +7,7 @@ interface Subscription {
 
 export function initializeClient(
   interval: number,
-  onReply: (data: string) => void
+  onReply: (data: string) => void,
 ): [Subscription, () => void] {
   let unmount = false;
   let ignoreResults = false;
@@ -69,7 +69,7 @@ export function initializeClient(
         promises = promises.then(() =>
           runSubscriptions().catch((e) => {
             console.log("Request failed", e);
-          })
+          }),
         );
       }, interval);
     }
@@ -101,7 +101,7 @@ export function initializeClient(
       promises = promises.then(() =>
         runQueue().catch((e) => {
           console.log("Request failed", e);
-        })
+        }),
       );
     }
   }

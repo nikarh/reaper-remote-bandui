@@ -15,7 +15,7 @@ function colorToRgba(color: string): string {
 
 export function onReply(
   result: string,
-  { setPlayState, setCurrentTime, setRegions, setTracks, setSends }: Setters
+  { setPlayState, setCurrentTime, setRegions, setTracks, setSends }: Setters,
 ) {
   let regionStrings: string[][] = [];
 
@@ -44,7 +44,7 @@ export function onReply(
             if (state & 1) return PlayState.Playing;
             if (state & 2) return PlayState.Paused;
             return PlayState.Stopped;
-          })(parseInt(tokens[1]))
+          })(parseInt(tokens[1])),
         );
 
         break;
@@ -65,7 +65,7 @@ export function onReply(
             startTime: parseFloat(startTime),
             endTime: parseFloat(endTime),
             color: colorToRgba(color),
-          })
+          }),
         );
 
         setRegions(newRegions);

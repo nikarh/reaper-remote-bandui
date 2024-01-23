@@ -82,7 +82,7 @@ export function ReaperProvider(p: ReaperProps) {
       setSends: (sends) => {
         setSends(reconcile(sends));
       },
-    })
+    }),
   );
   onCleanup(destroyClient);
 
@@ -120,7 +120,7 @@ export function ReaperProvider(p: ReaperProps) {
           (track) => track.id === id,
           produce((state) => {
             state.volume = volume;
-          })
+          }),
         );
       },
       setSendVolume(send, volume) {
@@ -131,7 +131,7 @@ export function ReaperProvider(p: ReaperProps) {
             send: send.index,
             volume,
           },
-          true
+          true,
         );
         setSends(
           (s) =>
@@ -140,7 +140,7 @@ export function ReaperProvider(p: ReaperProps) {
             s.trackTo == s.trackTo,
           produce((state) => {
             state.volume = volume;
-          })
+          }),
         );
       },
       toggleSendMute(send) {
@@ -150,7 +150,7 @@ export function ReaperProvider(p: ReaperProps) {
             track: send.trackTo,
             send: send.index,
           },
-          true
+          true,
         );
         setSends(
           (s) =>
@@ -159,7 +159,7 @@ export function ReaperProvider(p: ReaperProps) {
             s.trackTo == s.trackTo,
           produce((state) => {
             state.mute = !state.mute;
-          })
+          }),
         );
       },
     },

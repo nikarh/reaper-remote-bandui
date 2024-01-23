@@ -90,8 +90,8 @@ export function reduceActions(actions: Action[]): Action[] {
               type: "ToggleSendMute",
               track: parseInt(track),
               send,
-            } as ToggleSendMuteAction)
-        )
+            }) as ToggleSendMuteAction,
+        ),
     ),
   ];
 }
