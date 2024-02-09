@@ -31,6 +31,16 @@
             dark:text-white
             dark:bg-gray-500;
   }
+  
+  .btn-primary-red.selected {
+    @apply bg-red-200
+            text-blue-800
+            dark:text-white
+            focus:ring-red-700
+            border-red-200
+            dark:bg-red-500;
+  }
+
   .btn-outlined {
     @apply py-2.5
             px-5

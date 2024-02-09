@@ -2,6 +2,8 @@ import { Region, PlayState, Track, Send } from "./State";
 
 interface Setters {
   setPlayState(state: PlayState): void;
+  setRecording(recording: boolean): void;
+  setRepeat(repeat: boolean): void;
   setCurrentTime(time: number): void;
   setRegions(regions: Region[]): void;
   setTracks(tracks: Track[]): void;
@@ -15,7 +17,7 @@ function colorToRgba(color: string): string {
 
 export function onReply(
   result: string,
-  { setPlayState, setCurrentTime, setRegions, setTracks, setSends }: Setters,
+  { setPlayState, setRecording, setRepeat, setCurrentTime, setRegions, setTracks, setSends }: Setters,
 ) {
   let regionStrings: string[][] = [];
 
@@ -39,13 +41,18 @@ export function onReply(
         }
 
         setCurrentTime(parseFloat(tokens[2]));
+
+        const state = parseInt(tokens[1]);
         setPlayState(
           ((state) => {
             if (state & 1) return PlayState.Playing;
             if (state & 2) return PlayState.Paused;
             return PlayState.Stopped;
-          })(parseInt(tokens[1])),
+          })(state),
         );
+
+        setRecording((state & 4) != 0);
+        setRepeat(tokens[3] == "1");
 
         break;
       }

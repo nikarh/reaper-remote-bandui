@@ -17,6 +17,8 @@ interface Reaper {
   data: {
     currentTime: Accessor<number>;
     playState: Accessor<PlayState>;
+    recording: Accessor<boolean>;
+    repeat: Accessor<boolean>;
     regions: Accessor<Region[]>;
     tracks: Store<Track[]>;
     sends: Store<Send[]>;
@@ -25,11 +27,13 @@ interface Reaper {
     subscribe(request: string, interval: number): () => void;
     moveToRegion(region: Region): void;
     toggleSendMute(send: Send): void;
+    toggleRepeat(): void;
     setSendVolume(send: Send, volume: number): void;
     setOutputVolume(id: number, volume: number): void;
     play(): void;
     pause(): void;
     stop(): void;
+    record(): void;
   };
 }
 
@@ -37,6 +41,8 @@ const ReaperContext = createContext<Reaper>({
   data: {
     currentTime: () => 0,
     playState: () => PlayState.Stopped,
+    recording: () => false,
+    repeat: () => false,
     regions: () => [],
     tracks: [],
     sends: [],
@@ -45,11 +51,13 @@ const ReaperContext = createContext<Reaper>({
     subscribe: () => () => {},
     moveToRegion: () => {},
     toggleSendMute: () => {},
+    toggleRepeat: () => {},
     setSendVolume: () => {},
     setOutputVolume: () => {},
     play: () => {},
     pause: () => {},
     stop: () => {},
+    record: () => {},
   },
 });
 
@@ -65,6 +73,8 @@ export interface ReaperProps {
 export function ReaperProvider(p: ReaperProps) {
   const [currentTime, setCurrentTime] = createSignal(0);
   const [playState, setPlayState] = createSignal(PlayState.Stopped);
+  const [repeat, setRepeat] = createSignal(false);
+  const [recording, setRecording] = createSignal(false);
   const [regions, setRegions] = createSignal<Region[]>([], {
     equals: deepEqual,
   });
@@ -74,6 +84,8 @@ export function ReaperProvider(p: ReaperProps) {
   let [client, destroyClient] = initializeClient(p.interval, (result) =>
     onReply(result, {
       setPlayState,
+      setRepeat,
+      setRecording,
       setCurrentTime,
       setRegions,
       setTracks: (tracks) => {
@@ -94,6 +106,8 @@ export function ReaperProvider(p: ReaperProps) {
     data: {
       currentTime,
       playState,
+      recording,
+      repeat,
       regions,
       tracks,
       sends,
@@ -110,6 +124,9 @@ export function ReaperProvider(p: ReaperProps) {
       },
       stop() {
         client.run({ type: "Stop" }, false);
+      },
+      record() {
+        client.run({ type: "Record" }, false);
       },
       moveToRegion(region) {
         client.run({ type: "Move", pos: region.startTime, end: region.endTime }, false);
@@ -162,6 +179,9 @@ export function ReaperProvider(p: ReaperProps) {
           }),
         );
       },
+      toggleRepeat() {
+        client.run({ type: "ToggleRepeat" }, false);
+      }
     },
   };
 
