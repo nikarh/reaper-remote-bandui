@@ -112,7 +112,7 @@ export function ReaperProvider(p: ReaperProps) {
         client.run({ type: "Stop" }, false);
       },
       moveToRegion(region) {
-        client.run({ type: "Move", pos: region.startTime }, false);
+        client.run({ type: "Move", pos: region.startTime, end: region.endTime }, false);
       },
       setOutputVolume(id, volume) {
         client.run({ type: "SetTrackVolume", track: id, volume }, true);

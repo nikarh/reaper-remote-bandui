@@ -11,6 +11,7 @@ interface StopAction {
 interface MoveAction {
   type: "Move";
   pos: number;
+  end: number;
 }
 
 interface SetTrackVolumeAction {
@@ -107,7 +108,7 @@ export function actionsToCommands(actions: Action[]): string {
         case "Stop":
           return "40667;TRANSPORT";
         case "Move":
-          return `SET/POS/${action.pos};TRANSPORT`;
+          return `SET/POS/${action.end};40626;SET/POS/${action.pos};40625;TRANSPORT`;
         case "SetTrackVolume":
           return `SET/TRACK/${action.track}/VOL/${action.volume}`;
         case "SetSendVolume":
