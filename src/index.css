@@ -31,7 +31,7 @@
             dark:text-white
             dark:bg-gray-500;
   }
-  
+
   .btn-primary-red.selected {
     @apply bg-red-200
             text-blue-800

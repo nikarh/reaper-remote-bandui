@@ -70,7 +70,6 @@ The example project has some more tracks so here is a brief explanation of their
 - The input group is for tracks having a physical input source, like a guitar or a microphone. If any additional processing is needed (compression, eq, reverb), it should be put on these tracks
 - The output group is for tracks with physical outputs. All of these tracks have plugins for basic hearing safety - a `-10 dB` gain and a brick-wall limiter at `0 dB`. These tracks have "Receives" from input group tracks and audio group tracks.
 
-
 ## Notes
 
 When a specific song (region) is selected from the UI, it selects the region and sets the cursor to the beginning of the region. Selecting the region allows stopping the playback automatically when the region ends. For REAPER to stop the playback automatically you need to check `Preferences` -> `Audio` -> `Playback` -> `[x] Stop playback at end of loop if repeat is disabled.` and disable repeat in your project.

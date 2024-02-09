@@ -11,7 +11,6 @@ interface RecordAction {
   type: "Record";
 }
 
-
 interface MoveAction {
   type: "Move";
   pos: number;

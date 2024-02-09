@@ -29,3 +29,8 @@ export interface Region {
   endTime: number;
   color: string;
 }
+
+export interface CurrentTime {
+  seconds: number;
+  beats: string;
+}

@@ -11,11 +11,11 @@ import { createStore, produce, reconcile, Store } from "solid-js/store";
 
 import { initializeClient } from "./ClientLoop";
 import { onReply } from "./ResponseParser";
-import { PlayState, Region, Send, Track } from "./State";
+import { CurrentTime, PlayState, Region, Send, Track } from "./State";
 
 interface Reaper {
   data: {
-    currentTime: Accessor<number>;
+    currentTime: Accessor<CurrentTime>;
     playState: Accessor<PlayState>;
     recording: Accessor<boolean>;
     repeat: Accessor<boolean>;
@@ -39,7 +39,7 @@ interface Reaper {
 
 const ReaperContext = createContext<Reaper>({
   data: {
-    currentTime: () => 0,
+    currentTime: () => ({ seconds: 0, beats: "0.0.0" }),
     playState: () => PlayState.Stopped,
     recording: () => false,
     repeat: () => false,
@@ -71,7 +71,10 @@ export interface ReaperProps {
 }
 
 export function ReaperProvider(p: ReaperProps) {
-  const [currentTime, setCurrentTime] = createSignal(0);
+  const [currentTime, setCurrentTime] = createSignal({
+    seconds: 0,
+    beats: "0.0.0",
+  });
   const [playState, setPlayState] = createSignal(PlayState.Stopped);
   const [repeat, setRepeat] = createSignal(false);
   const [recording, setRecording] = createSignal(false);
@@ -129,7 +132,10 @@ export function ReaperProvider(p: ReaperProps) {
         client.run({ type: "Record" }, false);
       },
       moveToRegion(region) {
-        client.run({ type: "Move", pos: region.startTime, end: region.endTime }, false);
+        client.run(
+          { type: "Move", pos: region.startTime, end: region.endTime },
+          false,
+        );
       },
       setOutputVolume(id, volume) {
         client.run({ type: "SetTrackVolume", track: id, volume }, true);
@@ -181,7 +187,7 @@ export function ReaperProvider(p: ReaperProps) {
       },
       toggleRepeat() {
         client.run({ type: "ToggleRepeat" }, false);
-      }
+      },
     },
   };
 

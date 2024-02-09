@@ -7,7 +7,7 @@ import { Icons } from "./Components/UI/Icons";
 import { BottomNavigation } from "./Components/UI/BottomNavigation";
 
 const SUBSCRIPTIONS = [
-  { request: "TRANSPORT", interval: 2000 },
+  { request: "TRANSPORT", interval: 100 },
   // Query every 100ms for peak levels
   { request: "TRACK", interval: 100 },
   { request: "REGION", interval: 4000 },
