@@ -9,7 +9,7 @@
 My musical band uses an IEM setup for rehearsals and live shows.
 This setup is based on a [USB audio interface](https://www.behringer.com/product.html?modelCode=P0B2J) and software mixing in [REAPER](https://www.reaper.fm/).
 
-In REAPER we use named regions for songs, and simple sends from input channels to personal channels with a hardware output for each band member.
+In REAPER we use named regions for songs and simple sends from input channels to personal channels with a hardware output for each band member.
 
 To simplify mixing we use a web control feature of REAPER and each band member does mixing of their output from a phone. Fortunately, REAPER already includes an interface that allows doing just that - `more_me.html`. Unfortunately, though, this interface doesn't allow switching tracks or starting or stopping playback.
 
@@ -69,3 +69,8 @@ The example project has some more tracks so here is a brief explanation of their
 - The audio group is for tracks where you would put pre-recorded WAV files, like backtracks and vocal backtracks
 - The input group is for tracks having a physical input source, like a guitar or a microphone. If any additional processing is needed (compression, eq, reverb), it should be put on these tracks
 - The output group is for tracks with physical outputs. All of these tracks have plugins for basic hearing safety - a `-10 dB` gain and a brick-wall limiter at `0 dB`. These tracks have "Receives" from input group tracks and audio group tracks.
+
+
+## Notes
+
+When a specific song (region) is selected from the UI, it selects the region and sets the cursor to the beginning of the region. Selecting the region allows stopping the playback automatically when the region ends. For REAPER to stop the playback automatically you need to check `Preferences` -> `Audio` -> `Playback` -> `[x] Stop playback at end of loop if repeat is disabled.` and disable repeat in your project.
