@@ -14,7 +14,7 @@ export function MainControl() {
         <button
           type="button"
           onClick={play}
-          class={`btn-primary rounded-l w-16 ${
+          class={`btn-primary rounded-l w-14 ${
             state() == PlayState.Playing && "selected"
           }`}
         >
@@ -23,14 +23,14 @@ export function MainControl() {
         <button
           type="button"
           onClick={pause}
-          class={`btn-primary w-16 ${state() == PlayState.Paused && "selected"}`}
+          class={`btn-primary w-14 ${state() == PlayState.Paused && "selected"}`}
         >
           {Icons.Pause}
         </button>
         <button
           type="button"
           onClick={stop}
-          class={`btn-primary w-16 rounded-r ${
+          class={`btn-primary w-14 rounded-r ${
             state() == PlayState.Stopped && "selected"
           }`}
         >
@@ -38,21 +38,23 @@ export function MainControl() {
         </button>
       </div>
 
-      <button
-        type="button"
-        onClick={record}
-        class={`btn-primary btn-primary-red w-16 rounded ${recording() && "selected"}`}
-      >
-        {Icons.Record}
-      </button>
+      <div class="flex justify-center rounded-md shadow-sm" role="group">
+        <button
+          type="button"
+          onClick={record}
+          class={`btn-primary btn-primary-red w-14 rounded-l ${recording() && "selected"}`}
+        >
+          {Icons.Record}
+        </button>
 
-      <button
-        type="button"
-        onClick={toggleRepeat}
-        class={`btn-primary w-16 rounded-lg ${repeat() && "selected"}`}
-      >
-        {Icons.Repeat}
-      </button>
+        <button
+          type="button"
+          onClick={toggleRepeat}
+          class={`btn-primary w-14 rounded-r ${repeat() && "selected"}`}
+        >
+          {Icons.Repeat}
+        </button>
+      </div>
     </div>
   );
 }
