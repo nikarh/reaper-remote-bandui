@@ -69,7 +69,7 @@ function Slider(p: SliderProps) {
         <p
           class={`text-xs text-white ${
             input() != null ? "text-gray-400" : ""
-          } bg-neutral-900/40 rounded-lg p-1`}
+          } bg-neutral-900/40 rounded-lg p-1 font-mono`}
         >
           {input() == null && normalizedToDb(p.value).toFixed(2)}
           {input() != null && normalizedToDb(input() ?? 0).toFixed(2)} dB

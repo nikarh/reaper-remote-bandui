@@ -7,6 +7,9 @@ interface PauseAction {
 interface StopAction {
   type: "Stop";
 }
+interface RecordAction {
+  type: "Record";
+}
 
 interface MoveAction {
   type: "Move";
@@ -33,18 +36,25 @@ interface ToggleSendMuteAction {
   send: string;
 }
 
+interface ToggleRepeatAction {
+  type: "ToggleRepeat";
+}
+
 export type Action =
   | PlayAction
   | PauseAction
   | StopAction
+  | RecordAction
   | MoveAction
   | SetTrackVolumeAction
   | SetSendVolumeAction
-  | ToggleSendMuteAction;
+  | ToggleSendMuteAction
+  | ToggleRepeatAction;
 
 export function reduceActions(actions: Action[]): Action[] {
-  let control: (PlayAction | PauseAction | StopAction)[] = [];
+  let control: (PlayAction | PauseAction | StopAction | RecordAction)[] = [];
   let move: MoveAction[] = [];
+  let repeat: ToggleRepeatAction[] = [];
   let trackVolume: { [k in number]: SetTrackVolumeAction } = {};
   let sendVolume: { [k in number]: { [k in string]: SetSendVolumeAction } } =
     {};
@@ -55,10 +65,14 @@ export function reduceActions(actions: Action[]): Action[] {
       case "Play":
       case "Pause":
       case "Stop":
+      case "Record":
         control = [action];
         break;
       case "Move":
         move = [action];
+        break;
+      case "ToggleRepeat":
+        repeat = [action];
         break;
       case "SetTrackVolume":
         trackVolume[action.track] = action;
@@ -80,6 +94,7 @@ export function reduceActions(actions: Action[]): Action[] {
   return [
     ...control,
     ...move,
+    ...repeat,
     ...Object.values(trackVolume),
     ...Object.values(sendVolume).flatMap((s) => Object.values(s)),
     ...Object.entries(sendMutes).flatMap(([track, sends]) =>
@@ -107,6 +122,10 @@ export function actionsToCommands(actions: Action[]): string {
           return "1008;TRANSPORT";
         case "Stop":
           return "40667;TRANSPORT";
+        case "Record":
+          return "1013;TRANSPORT";
+        case "ToggleRepeat":
+          return "1068;TRANSPORT";
         case "Move":
           return `SET/POS/${action.end};40626;SET/POS/${action.pos};40625;TRANSPORT`;
         case "SetTrackVolume":
