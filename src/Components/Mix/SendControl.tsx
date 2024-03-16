@@ -108,7 +108,7 @@ export function SendControl(p: SendControlProps) {
       <button
         type="button"
         class={`text-xs ml-5 px-7 py-2 ${
-          p.send.mute ? "btn-outlined-red" : "btn-outlined"
+          p.send.mute ? "btn-mute-red" : "btn-mute"
         }`}
         onClick={p.onMuteToggle}
       >
