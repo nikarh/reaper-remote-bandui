@@ -92,7 +92,7 @@ interface SendControlProps {
 
 export function SendControl(p: SendControlProps) {
   return (
-    <div class="my-3 p-2 bg-white  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
+    <div class="my-3 p-2 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
       <Slider
         label={
           <>
@@ -108,7 +108,7 @@ export function SendControl(p: SendControlProps) {
       <button
         type="button"
         class={`text-xs ml-5 px-7 py-2 ${
-          p.send.mute ? "btn-outlined-red" : "btn-outlined"
+          p.send.mute ? "btn-mute-red" : "btn-mute"
         }`}
         onClick={p.onMuteToggle}
       >

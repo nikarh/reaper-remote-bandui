@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "6.78/linux-x86_64" 1679927520
+<REAPER_PROJECT 0.1 "7.11/linux-x86_64" 1710608575
   <NOTES 0 2
   >
   RIPPLE 0
@@ -71,7 +71,7 @@
   MASTERTRACKHEIGHT 0 0
   MASTERPEAKCOL 16576
   MASTERMUTESOLO 0
-  MASTERTRACKVIEW 0 0.6667 0.5 0.5 0 -1 0 0 0 0 0 0 0
+  MASTERTRACKVIEW 0 0.6667 0.5 0.5 0 -1 0 0 0 0 0 0 0 0
   MASTERHWOUT 0 0 1 0 1 0 0 -1
   MASTER_NCH 4 2
   MASTER_VOLUME 0.66 0 -1 -1 1
@@ -95,15 +95,15 @@
     DEFSHAPE 1 -1 -1
     PT 0.000000000001 115.0000287500 1
   >
-  MARKER 1 0 "" 0 0 1 B {1F9B8B34-1C66-84DF-D437-2AD7A326359B}
-  MARKER 1 0.00000000000097 "Song 1" 1 0 1 B {BAA5B1BE-F406-6AE8-77EA-111BEE4305F7}
-  MARKER 1 250.43472000001663 "" 1 0 1 B
-  MARKER 2 333.91296000002183 "Song 2" 1 0 1 B {48FB3B12-9C2D-B592-5400-2AE20785DF92}
-  MARKER 2 550.95638400003531 "" 1 0 1 B
-  MARKER 2 333.91296000002183 "" 0 0 1 B {C5377EDF-29FC-FEAA-0D4E-B2069F2AE417}
-  MARKER 3 684.52156800004377 "Song 3" 1 0 1 B {06E043B5-5ED2-0A7D-A4E9-43018CD84F17}
-  MARKER 3 1126.9562400000714 "" 1 0 1 B
-  MARKER 3 684.52156800004377 "" 0 0 1 B {D49AE53A-CE94-B9E2-9615-1CA54E4E9C2D}
+  MARKER 1 0 "" 0 0 1 B {1F9B8B34-1C66-84DF-D437-2AD7A326359B} 0
+  MARKER 1 0.00000000000097 "Song 1" 1 0 1 B {BAA5B1BE-F406-6AE8-77EA-111BEE4305F7} 0
+  MARKER 1 250.43472000001663 "" 1
+  MARKER 2 333.91296000002183 "Song 2" 1 25921319 1 B {48FB3B12-9C2D-B592-5400-2AE20785DF92} 0
+  MARKER 2 550.95638400003531 "" 1
+  MARKER 2 333.91296000002183 "" 0 0 1 B {C5377EDF-29FC-FEAA-0D4E-B2069F2AE417} 0
+  MARKER 3 684.52156800004377 "Song 3" 1 20716939 1 B {06E043B5-5ED2-0A7D-A4E9-43018CD84F17} 0
+  MARKER 3 1126.9562400000714 "" 1
+  MARKER 3 684.52156800004377 "" 0 0 1 B {D49AE53A-CE94-B9E2-9615-1CA54E4E9C2D} 0
   <PROJBAY
   >
   <TRACK {93203F69-DDEF-ED48-8FC3-902D10C8FDA2}
@@ -122,7 +122,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 38 0 1 0 0 0
+    TRACKHEIGHT 38 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -148,7 +148,7 @@
     SEL 1
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 31 0 1 0 0 0
+    TRACKHEIGHT 31 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -269,7 +269,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 24 0 1 0 0 0
+    TRACKHEIGHT 24 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -294,7 +294,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 0 0 0 0 0 0
+    TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -319,7 +319,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 0 0 0 0 0 0
+    TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -345,7 +345,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 24 0 1 0 0 0
+    TRACKHEIGHT 24 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -370,7 +370,7 @@
     SEL 0
     REC 1 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 58 0 1 0 0 0
+    TRACKHEIGHT 58 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -401,7 +401,7 @@
     SEL 0
     REC 1 2 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 58 0 1 0 0 0
+    TRACKHEIGHT 58 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -432,7 +432,7 @@
     SEL 0
     REC 1 3 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 58 0 1 0 0 0
+    TRACKHEIGHT 58 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 6
     FX 1
@@ -463,7 +463,7 @@
     SEL 0
     REC 1 4 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 58 0 1 0 0 0
+    TRACKHEIGHT 58 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -495,7 +495,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 24 0 1 0 0 0
+    TRACKHEIGHT 24 0 1 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -520,7 +520,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 0 0 0 0 0 0
+    TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
@@ -539,7 +539,7 @@
       DOCKED 0
       BYPASS 0 0 0
       <JS utility/volume "-10 db"
-        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       >
       FLOATPOS 64 707 554 120
       FXID {5229CD52-0A33-664E-8A35-473A4DBC38F8}
@@ -548,7 +548,7 @@
       <VST "VST: ReaComp (Cockos)" reacomp.vst.so 0 LIMITER 1919247213<5653547265636D726561636F6D700000> ""
         bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==
         776t3g3wrd4AAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD7ZiZ09AAAAAAAAAAA=
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {2F40B329-C0BE-F745-BA65-85536852176D}
@@ -570,7 +570,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 0 0 0 0 0 0
+    TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     TRACKIMGFN "drums.png"
@@ -595,7 +595,7 @@
       DOCKED 0
       BYPASS 0 0 0
       <JS utility/volume "-10 db"
-        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       >
       FLOATPOS 0 0 0 0
       FXID {973E9346-8782-7C44-84E1-F7C5F8A57B9E}
@@ -604,7 +604,7 @@
       <VST "VST: ReaComp (Cockos)" reacomp.vst.so 0 LIMITER 1919247213<5653547265636D726561636F6D700000> ""
         bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==
         776t3g3wrd4AAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD7ZiZ09AAAAAAAAAAA=
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {878925CC-AC4D-0941-8AF1-67FF1CB1A21B}
@@ -626,7 +626,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 0 0 0 0 0 0
+    TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     TRACKIMGFN "bass_full.png"
@@ -651,7 +651,7 @@
       DOCKED 0
       BYPASS 0 0 0
       <JS utility/volume "-10 db"
-        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       >
       FLOATPOS 0 0 0 0
       FXID {81E0A8AF-5FCD-334A-A010-EB96DE493EEB}
@@ -660,7 +660,7 @@
       <VST "VST: ReaComp (Cockos)" reacomp.vst.so 0 LIMITER 1919247213<5653547265636D726561636F6D700000> ""
         bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==
         776t3g3wrd4AAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD7ZiZ09AAAAAAAAAAA=
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {D23817CD-7DD9-C44C-A0EB-FD4A0E83CDCC}
@@ -682,7 +682,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 0 0 0 0 0 0
+    TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     TRACKIMGFN "guitar.png"
@@ -707,7 +707,7 @@
       DOCKED 0
       BYPASS 0 0 0
       <JS utility/volume "-10 db"
-        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       >
       FLOATPOS 0 0 0 0
       FXID {A7221338-0BCC-F64E-8ECC-CA42800FF9D7}
@@ -716,7 +716,7 @@
       <VST "VST: ReaComp (Cockos)" reacomp.vst.so 0 LIMITER 1919247213<5653547265636D726561636F6D700000> ""
         bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==
         776t3g3wrd4AAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD7ZiZ09AAAAAAAAAAA=
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {12FFC418-E224-214E-9E87-C2E4FA1E7742}
@@ -738,7 +738,7 @@
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 2
-    TRACKHEIGHT 0 0 0 0 0 0
+    TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     TRACKIMGFN "mic_dynamic_1.png"
@@ -763,7 +763,7 @@
       DOCKED 0
       BYPASS 0 0 0
       <JS utility/volume "-10 db"
-        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        -10 0 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       >
       FLOATPOS 0 0 0 0
       FXID {2CD5F09C-D0EC-7148-83C1-1020231BFFAA}
@@ -772,7 +772,7 @@
       <VST "VST: ReaComp (Cockos)" reacomp.vst.so 0 LIMITER 1919247213<5653547265636D726561636F6D700000> ""
         bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==
         776t3g3wrd4AAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD7ZiZ09AAAAAAAAAAA=
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {519B32B5-251A-4443-A5CF-05569E6C1A4D}

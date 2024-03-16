@@ -8,6 +8,7 @@ interface Setters {
   setRegions(regions: Region[]): void;
   setTracks(tracks: Track[]): void;
   setSends(sends: Send[]): void;
+  setRawRegionMeta(meta: string): void;
 }
 
 function colorToRgba(color: string): string {
@@ -25,6 +26,7 @@ export function onReply(
     setRegions,
     setTracks,
     setSends,
+    setRawRegionMeta,
   }: Setters,
 ) {
   let regionStrings: string[][] = [];
@@ -82,7 +84,7 @@ export function onReply(
             id: parseInt(id),
             startTime: parseFloat(startTime),
             endTime: parseFloat(endTime),
-            color: colorToRgba(color),
+            color: color === "0" ? undefined : colorToRgba(color),
           }),
         );
 
@@ -131,6 +133,11 @@ export function onReply(
           volume: parseFloat(volume),
           mute: (parseInt(flags) & 8) != 0,
         });
+      }
+      case "PROJEXTSTATE": {
+        if (tokens[1] === "BANDUI" && tokens[2] === "regions") {
+          setRawRegionMeta(tokens[3]);
+        }
       }
     }
   }

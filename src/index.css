@@ -42,7 +42,7 @@
   }
 
   .btn-outlined {
-    @apply py-2.5
+    @apply appearance-none py-2.5
             px-5
             font-medium
             text-sm
@@ -50,17 +50,13 @@
             focus:outline-none
             bg-white
             rounded-lg
-            border
-            border-gray-200
+            border-2
+            border-gray-100
             hover:bg-gray-100
             hover:text-blue-700
-            focus:z-10
-            focus:ring-4
-            focus:ring-gray-200
-            dark:focus:ring-gray-700
             dark:bg-gray-800
             dark:text-gray-400
-            dark:border-gray-600
+            dark:border-transparent
             dark:hover:text-white
             dark:hover:bg-gray-700;
   }
@@ -69,10 +65,54 @@
     @apply bg-gray-100
             text-blue-700
             dark:text-white
-            dark:bg-gray-700;
+            dark:bg-gray-700
+            z-10
+            border-slate-200;
   }
 
-  .btn-outlined-red {
+  .btn-outlined.playing {
+    @apply border-2 border-emerald-300;
+  }
+
+  .btn-outlined.paused {
+    @apply border-2 border-yellow-600;
+  }
+
+  .btn-outlined.stopped {
+    @apply border-2 border-orange-600;
+  }
+
+  .btn-checkbox,
+  .btn-checkbox.selected {
+    @apply dark:hover:text-gray-200
+            dark:hover:bg-gray-600;
+  }
+
+  .btn-mute {
+    @apply py-2.5
+      px-5
+      font-medium
+      text-sm
+      text-gray-900
+      focus:outline-none
+      bg-white
+      rounded-lg
+      border
+      border-gray-200
+      hover:bg-gray-100
+      hover:text-blue-700
+      focus:z-10
+      focus:ring-4
+      focus:ring-gray-200
+      dark:focus:ring-gray-700
+      dark:bg-gray-800
+      dark:text-gray-400
+      dark:border-gray-600
+      dark:hover:text-white
+      dark:hover:bg-gray-700;
+  }
+
+  .btn-mute-red {
     @apply py-2.5
             px-5
             font-medium
@@ -91,5 +131,41 @@
             dark:bg-red-600
             dark:hover:bg-red-700
             dark:focus:ring-red-900;
+  }
+
+  .btn-round {
+    @apply py-1
+            px-1
+            font-medium
+            text-sm
+            text-gray-900
+            bg-white
+            rounded-lg
+            dark:bg-gray-800
+            dark:text-gray-400;
+  }
+
+  .btn-round:disabled {
+    @apply dark:bg-gray-900
+           dark:text-gray-700;
+  }
+
+  .btn-round:not(:disabled) {
+    @apply hover:bg-gray-100
+           hover:text-blue-700
+           dark:hover:text-white
+           dark:hover:bg-gray-700
+           focus:z-10
+           focus:ring-4
+           focus:ring-gray-200
+           dark:focus:ring-gray-700
+           focus:outline-none;
+  }
+
+  .btn-round.selected {
+    @apply bg-gray-100
+            text-blue-700
+            dark:text-white
+            dark:bg-gray-700;
   }
 }

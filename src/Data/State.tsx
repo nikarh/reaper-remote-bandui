@@ -27,8 +27,16 @@ export interface Region {
   name: string;
   startTime: number;
   endTime: number;
-  color: string;
+  color?: string;
 }
+
+export interface RegionMeta {
+  id: number;
+  index: number;
+  disabled: boolean;
+}
+
+export type ParsedMeta = { [k: number]: RegionMeta };
 
 export interface CurrentTime {
   seconds: number;
