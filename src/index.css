@@ -42,7 +42,7 @@
   }
 
   .btn-outlined {
-    @apply py-2.5
+    @apply appearance-none py-2.5
             px-5
             font-medium
             text-sm
@@ -51,12 +51,12 @@
             bg-white
             rounded-lg
             border
-            border-gray-200
+            border-gray-100
             hover:bg-gray-100
             hover:text-blue-700
             dark:bg-gray-800
             dark:text-gray-400
-            dark:border-gray-600
+            dark:border-gray-400
             dark:hover:text-white
             dark:hover:bg-gray-700;
   }
@@ -67,21 +67,19 @@
             dark:text-white
             dark:bg-gray-700
             z-10
-            border-0
-            ring-2
-            ring-slate-400;
+            border-slate-900;
   }
 
   .btn-outlined.playing {
-    @apply ring-emerald-600;
+    @apply border-2 border-emerald-300;
   }
 
   .btn-outlined.paused {
-    @apply ring-yellow-700;
+    @apply border-2 border-yellow-600;
   }
 
   .btn-outlined.stopped {
-    @apply ring-orange-700;
+    @apply border-2 border-orange-600;
   }
 
   .btn-checkbox,
