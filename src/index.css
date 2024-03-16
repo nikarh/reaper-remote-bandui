@@ -67,20 +67,21 @@
             dark:text-white
             dark:bg-gray-700
             z-10
+            border-0
             ring-2
             ring-slate-400;
   }
 
   .btn-outlined.playing {
-    @apply ring-emerald-700;
+    @apply ring-4 ring-emerald-600;
   }
 
   .btn-outlined.paused {
-    @apply ring-yellow-700;
+    @apply ring-4 ring-yellow-700;
   }
 
   .btn-outlined.stopped {
-    @apply ring-orange-700;
+    @apply ring-4 ring-orange-700;
   }
 
   .btn-checkbox,
