@@ -92,7 +92,7 @@ interface SendControlProps {
 
 export function SendControl(p: SendControlProps) {
   return (
-    <div class="my-3 p-2 bg-white  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
+    <div class="my-3 p-2 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
       <Slider
         label={
           <>

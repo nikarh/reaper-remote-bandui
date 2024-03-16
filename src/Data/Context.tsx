@@ -1,7 +1,9 @@
 import deepEqual from "deep-equal";
 import {
   Accessor,
+  createComputed,
   createContext,
+  createMemo,
   createSignal,
   JSX,
   onCleanup,
@@ -11,7 +13,14 @@ import { createStore, produce, reconcile, Store } from "solid-js/store";
 
 import { initializeClient } from "./ClientLoop";
 import { onReply } from "./ResponseParser";
-import { CurrentTime, PlayState, Region, Send, Track } from "./State";
+import {
+  CurrentTime,
+  ParsedMeta,
+  PlayState,
+  Region,
+  Send,
+  Track,
+} from "./State";
 
 interface Reaper {
   data: {
@@ -20,6 +29,7 @@ interface Reaper {
     recording: Accessor<boolean>;
     repeat: Accessor<boolean>;
     regions: Accessor<Region[]>;
+    regionMeta: Accessor<ParsedMeta>;
     tracks: Store<Track[]>;
     sends: Store<Send[]>;
   };
@@ -30,6 +40,7 @@ interface Reaper {
     toggleRepeat(): void;
     setSendVolume(send: Send, volume: number): void;
     setOutputVolume(id: number, volume: number): void;
+    updateRegionMeta(meta: ParsedMeta): void;
     play(): void;
     pause(): void;
     stop(): void;
@@ -44,6 +55,7 @@ const ReaperContext = createContext<Reaper>({
     recording: () => false,
     repeat: () => false,
     regions: () => [],
+    regionMeta: () => ({}),
     tracks: [],
     sends: [],
   },
@@ -54,6 +66,7 @@ const ReaperContext = createContext<Reaper>({
     toggleRepeat: () => {},
     setSendVolume: () => {},
     setOutputVolume: () => {},
+    updateRegionMeta: () => {},
     play: () => {},
     pause: () => {},
     stop: () => {},
@@ -70,6 +83,32 @@ export interface ReaperProps {
   children: JSX.Element;
 }
 
+function parseRegionMeta(meta: string): ParsedMeta {
+  let parsed = meta.split(",").map((item, index) => {
+    const disabled = item.length > 0 && item[0] === "0";
+    const id = parseInt(item.slice(1), 10);
+
+    return {
+      id,
+      index,
+      disabled,
+    };
+  });
+
+  return parsed.reduce((acc: ParsedMeta, next) => {
+    acc[next.id] = next;
+    return acc;
+  }, {});
+}
+
+function serializeRegionMeta(meta: ParsedMeta): string {
+  const values = Object.values(meta);
+  values.sort((a, b) => a.index - b.index);
+  return values
+    .map(({ id, disabled }) => `${disabled ? "0" : "1"}${id}`)
+    .join(",");
+}
+
 export function ReaperProvider(p: ReaperProps) {
   const [currentTime, setCurrentTime] = createSignal({
     seconds: 0,
@@ -84,6 +123,11 @@ export function ReaperProvider(p: ReaperProps) {
   const [tracks, setTracks] = createStore<Track[]>([]);
   const [sends, setSends] = createStore<Send[]>([]);
 
+  const [regionRawMeta, setRawRegionMeta] = createSignal<string>("");
+  const [regionMeta, setRegionMeta] = createSignal<ParsedMeta>({});
+
+  createComputed(() => setRegionMeta(parseRegionMeta(regionRawMeta())));
+
   let [client, destroyClient] = initializeClient(p.interval, (result) =>
     onReply(result, {
       setPlayState,
@@ -97,6 +141,7 @@ export function ReaperProvider(p: ReaperProps) {
       setSends: (sends) => {
         setSends(reconcile(sends));
       },
+      setRawRegionMeta,
     }),
   );
   onCleanup(destroyClient);
@@ -112,6 +157,7 @@ export function ReaperProvider(p: ReaperProps) {
       recording,
       repeat,
       regions,
+      regionMeta,
       tracks,
       sends,
     },
@@ -187,6 +233,16 @@ export function ReaperProvider(p: ReaperProps) {
       },
       toggleRepeat() {
         client.run({ type: "ToggleRepeat" }, false);
+      },
+      updateRegionMeta(update) {
+        const newState = setRegionMeta(update);
+        client.run(
+          {
+            type: "SetRegionsMeta",
+            value: serializeRegionMeta(newState),
+          },
+          true,
+        );
       },
     },
   };

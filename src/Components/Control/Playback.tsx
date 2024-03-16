@@ -18,14 +18,14 @@ export function MainControl() {
             state() == PlayState.Playing && "selected"
           }`}
         >
-          {Icons.Play}
+          <Icons.Play />
         </button>
         <button
           type="button"
           onClick={pause}
           class={`btn-primary w-14 ${state() == PlayState.Paused && "selected"}`}
         >
-          {Icons.Pause}
+          <Icons.Pause />
         </button>
         <button
           type="button"
@@ -34,7 +34,7 @@ export function MainControl() {
             state() == PlayState.Stopped && "selected"
           }`}
         >
-          {Icons.Stop}
+          <Icons.Stop />
         </button>
       </div>
 
@@ -44,7 +44,7 @@ export function MainControl() {
           onClick={record}
           class={`btn-primary btn-primary-red w-14 rounded-l ${recording() && "selected"}`}
         >
-          {Icons.Record}
+          <Icons.Record />
         </button>
 
         <button
@@ -52,7 +52,7 @@ export function MainControl() {
           onClick={toggleRepeat}
           class={`btn-primary w-14 rounded-r ${repeat() && "selected"}`}
         >
-          {Icons.Repeat}
+          <Icons.Repeat />
         </button>
       </div>
     </div>

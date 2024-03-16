@@ -40,6 +40,11 @@ interface ToggleRepeatAction {
   type: "ToggleRepeat";
 }
 
+interface SetRegionsMeta {
+  type: "SetRegionsMeta";
+  value: string;
+}
+
 export type Action =
   | PlayAction
   | PauseAction
@@ -49,16 +54,16 @@ export type Action =
   | SetTrackVolumeAction
   | SetSendVolumeAction
   | ToggleSendMuteAction
-  | ToggleRepeatAction;
+  | ToggleRepeatAction
+  | SetRegionsMeta;
 
 export function reduceActions(actions: Action[]): Action[] {
-  let control: (PlayAction | PauseAction | StopAction | RecordAction)[] = [];
-  let move: MoveAction[] = [];
-  let repeat: ToggleRepeatAction[] = [];
+  let latest: { [k: string]: Action } = {};
   let trackVolume: { [k in number]: SetTrackVolumeAction } = {};
   let sendVolume: { [k in number]: { [k in string]: SetSendVolumeAction } } =
     {};
   let sendMutes: { [k in number]: { [k in string]: boolean } } = {};
+  let others: Action[] = [];
 
   for (let action of actions) {
     switch (action.type) {
@@ -66,13 +71,12 @@ export function reduceActions(actions: Action[]): Action[] {
       case "Pause":
       case "Stop":
       case "Record":
-        control = [action];
+        latest["control"] = action;
         break;
       case "Move":
-        move = [action];
-        break;
       case "ToggleRepeat":
-        repeat = [action];
+      case "SetRegionsMeta":
+        latest[action.type] = action;
         break;
       case "SetTrackVolume":
         trackVolume[action.track] = action;
@@ -88,13 +92,14 @@ export function reduceActions(actions: Action[]): Action[] {
           [action.send]: !(sendVolume[action.track] ?? false),
         };
         break;
+      default:
+        others.push(action);
+        break;
     }
   }
 
   return [
-    ...control,
-    ...move,
-    ...repeat,
+    ...Object.values(latest),
     ...Object.values(trackVolume),
     ...Object.values(sendVolume).flatMap((s) => Object.values(s)),
     ...Object.entries(sendMutes).flatMap(([track, sends]) =>
@@ -109,6 +114,7 @@ export function reduceActions(actions: Action[]): Action[] {
             }) as ToggleSendMuteAction,
         ),
     ),
+    ...others,
   ];
 }
 
@@ -134,6 +140,8 @@ export function actionsToCommands(actions: Action[]): string {
           return `SET/TRACK/${action.track}/SEND/${action.send}/VOL/${action.volume}`;
         case "ToggleSendMute":
           return `SET/TRACK/${action.track}/SEND/${action.send}/MUTE/-1`;
+        case "SetRegionsMeta":
+          return `SET/PROJEXTSTATE/BANDUI/regions/${action.value}`;
       }
     })
     .join(";");
