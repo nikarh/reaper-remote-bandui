@@ -1,29 +1,37 @@
-name: Build and publish
+name: Release
 
 on:
-  push:
-    branches: ["master"]
-
+  workflow_dispatch:
+    inputs:
+      version:
+        type: choice
+        description: Version update
+        options:
+          - patch
+          - minor
+          - major
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - id: release
-        uses: rymndhng/release-on-push-action@v0.27.0
+        uses: rymndhng/release-on-push-action@v0.28.0
         with:
-          bump_version_scheme: minor
+          bump_version_scheme: ${{ inputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
       - run: npm ci
+      - run: npm run check
+      - run: npm run tsc
       - run: npm run build
       - run: mv dist/index.html dist/remote-bandui.html
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.release.outputs.tag_name }}
           files: |

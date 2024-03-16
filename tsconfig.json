@@ -8,6 +8,8 @@
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
     "strict": true,
-    "baseUrl": "./",
+    "baseUrl": "./"
   },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

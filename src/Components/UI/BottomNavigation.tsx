@@ -1,4 +1,4 @@
-import { For, JSX } from "solid-js";
+import { For, type JSX } from "solid-js";
 
 import "./BottomNavigation.css";
 
@@ -17,7 +17,7 @@ export function BottomNavigation<Item>(p: BottomNavigationProps<Item>) {
             {(item) => (
               <button
                 type="button"
-                class={p.selected == item[0] ? "selected" : ""}
+                class={p.selected === item[0] ? "selected" : ""}
                 onClick={() => p.onSelect(item[0])}
               >
                 {item[1]}

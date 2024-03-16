@@ -58,20 +58,20 @@ export type Action =
   | SetRegionsMeta;
 
 export function reduceActions(actions: Action[]): Action[] {
-  let latest: { [k: string]: Action } = {};
-  let trackVolume: { [k in number]: SetTrackVolumeAction } = {};
-  let sendVolume: { [k in number]: { [k in string]: SetSendVolumeAction } } =
+  const latest: { [k: string]: Action } = {};
+  const trackVolume: { [k in number]: SetTrackVolumeAction } = {};
+  const sendVolume: { [k in number]: { [k in string]: SetSendVolumeAction } } =
     {};
-  let sendMutes: { [k in number]: { [k in string]: boolean } } = {};
-  let others: Action[] = [];
+  const sendMutes: { [k in number]: { [k in string]: boolean } } = {};
+  const others: Action[] = [];
 
-  for (let action of actions) {
+  for (const action of actions) {
     switch (action.type) {
       case "Play":
       case "Pause":
       case "Stop":
       case "Record":
-        latest["control"] = action;
+        latest.control = action;
         break;
       case "Move":
       case "ToggleRepeat":
@@ -109,7 +109,7 @@ export function reduceActions(actions: Action[]): Action[] {
           ([send]) =>
             ({
               type: "ToggleSendMute",
-              track: parseInt(track),
+              track: Number.parseInt(track),
               send,
             }) as ToggleSendMuteAction,
         ),

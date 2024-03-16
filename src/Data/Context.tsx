@@ -1,25 +1,25 @@
 import deepEqual from "deep-equal";
 import {
-  Accessor,
+  type Accessor,
+  type JSX,
   createComputed,
   createContext,
   createMemo,
   createSignal,
-  JSX,
   onCleanup,
   useContext,
 } from "solid-js";
-import { createStore, produce, reconcile, Store } from "solid-js/store";
+import { type Store, createStore, produce, reconcile } from "solid-js/store";
 
 import { initializeClient } from "./ClientLoop";
 import { onReply } from "./ResponseParser";
 import {
-  CurrentTime,
-  ParsedMeta,
+  type CurrentTime,
+  type ParsedMeta,
   PlayState,
-  Region,
-  Send,
-  Track,
+  type Region,
+  type Send,
+  type Track,
 } from "./State";
 
 interface Reaper {
@@ -84,9 +84,9 @@ export interface ReaperProps {
 }
 
 function parseRegionMeta(meta: string): ParsedMeta {
-  let parsed = meta.split(",").map((item, index) => {
+  const parsed = meta.split(",").map((item, index) => {
     const disabled = item.length > 0 && item[0] === "0";
-    const id = parseInt(item.slice(1), 10);
+    const id = Number.parseInt(item.slice(1), 10);
 
     return {
       id,
@@ -128,7 +128,7 @@ export function ReaperProvider(p: ReaperProps) {
 
   createComputed(() => setRegionMeta(parseRegionMeta(regionRawMeta())));
 
-  let [client, destroyClient] = initializeClient(p.interval, (result) =>
+  const [client, destroyClient] = initializeClient(p.interval, (result) =>
     onReply(result, {
       setPlayState,
       setRepeat,
@@ -146,7 +146,7 @@ export function ReaperProvider(p: ReaperProps) {
   );
   onCleanup(destroyClient);
 
-  for (let sub of p.subscriptions) {
+  for (const sub of p.subscriptions) {
     client.subscribe(sub.request, sub.interval);
   }
 
@@ -167,7 +167,7 @@ export function ReaperProvider(p: ReaperProps) {
         client.run({ type: "Play" }, false);
       },
       pause() {
-        if (playState() == PlayState.Playing) {
+        if (playState() === PlayState.Playing) {
           client.run({ type: "Pause" }, false);
         }
       },
@@ -205,8 +205,8 @@ export function ReaperProvider(p: ReaperProps) {
         setSends(
           (s) =>
             s.index === send.index &&
-            s.trackFrom == s.trackFrom &&
-            s.trackTo == s.trackTo,
+            s.trackFrom === send.trackFrom &&
+            s.trackTo === send.trackTo,
           produce((state) => {
             state.volume = volume;
           }),
@@ -224,8 +224,8 @@ export function ReaperProvider(p: ReaperProps) {
         setSends(
           (s) =>
             s.index === send.index &&
-            s.trackFrom == s.trackFrom &&
-            s.trackTo == s.trackTo,
+            s.trackFrom === send.trackFrom &&
+            s.trackTo === send.trackTo,
           produce((state) => {
             state.mute = !state.mute;
           }),

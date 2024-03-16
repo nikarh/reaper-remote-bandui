@@ -1,24 +1,27 @@
 {
-  "name": "vite-template-solid",
+  "name": "reaper-remote-bandui",
   "version": "0.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "dev": "vite",
+    "check": "biome check .",
+    "tsc": "tsc --noEmit",
     "build": "vite build",
     "serve": "vite preview",
-    "prettier": "prettier --write ."
+    "fix": "biome check --apply ."
   },
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "1.6.1",
     "@types/deep-equal": "^1.0.1",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
     "postcss-input-range": "^5.0.0",
-    "prettier": "^3.2.4",
     "tailwindcss": "^3.2.6",
     "typescript": "^5.0.2",
     "vite": "^5.0.12",
-    "vite-plugin-singlefile": "^1.0.0",
+    "vite-plugin-singlefile": "^2.0.1",
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {

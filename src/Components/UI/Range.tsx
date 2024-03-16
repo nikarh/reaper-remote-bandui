@@ -30,20 +30,20 @@ export function Range(p: RangeProps) {
         max={p.max}
         value={p.value}
         onChange={(e) => {
-          let value = parseFloat((e.target as HTMLInputElement).value);
+          const value = Number.parseFloat((e.target as HTMLInputElement).value);
           p.onChange(value);
         }}
         onInput={(e) => {
-          let value = parseFloat((e.target as HTMLInputElement).value);
+          const value = Number.parseFloat((e.target as HTMLInputElement).value);
           setProgress(value);
           p.onInput?.(value);
         }}
         step={p.step}
-        class={`relative w-full h-full bg-gray-200 dark:bg-gray-600`}
+        class={"relative w-full h-full bg-gray-200 dark:bg-gray-600"}
       />
 
       <div
-        class={`absolute left-0 top-0 bottom-0 pointer-events-none`}
+        class={"absolute left-0 top-0 bottom-0 pointer-events-none"}
         style={`width: ${valueToPercentage(p.min, p.max, progress())}%;`}
       >
         <div
