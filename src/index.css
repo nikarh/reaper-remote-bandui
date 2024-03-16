@@ -71,11 +71,9 @@
             ring-slate-400;
   }
 
-
   .btn-outlined.playing {
     @apply ring-emerald-700;
   }
-
 
   .btn-outlined.paused {
     @apply ring-yellow-700;
