@@ -73,15 +73,15 @@
   }
 
   .btn-outlined.playing {
-    @apply ring-4 ring-emerald-600;
+    @apply ring-emerald-600;
   }
 
   .btn-outlined.paused {
-    @apply ring-4 ring-yellow-700;
+    @apply ring-yellow-700;
   }
 
   .btn-outlined.stopped {
-    @apply ring-4 ring-orange-700;
+    @apply ring-orange-700;
   }
 
   .btn-checkbox,
