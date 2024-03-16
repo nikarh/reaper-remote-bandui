@@ -7,7 +7,13 @@ import {
   Switch,
 } from "solid-js";
 import { useReaper } from "../../Data/Context";
-import { CurrentTime, ParsedMeta, Region, RegionMeta } from "../../Data/State";
+import {
+  CurrentTime,
+  ParsedMeta,
+  PlayState,
+  Region,
+  RegionMeta,
+} from "../../Data/State";
 import { Icons } from "../UI/Icons";
 
 function progress(region: Region, currentTime: number): number {
@@ -41,7 +47,8 @@ function Progress(p: { region: Region; currentTime: CurrentTime }) {
 
       <div class="absolute top-0 bottom-0 right-0 flex items-center opacity-90 px-1">
         <p class="text-xs text-gray-300 bg-neutral-900/40 rounded-lg p-1 font-mono">
-          {time(p.currentTime.seconds)} / {p.currentTime.beats}
+          {time(p.currentTime.seconds - p.region.startTime)} /{" "}
+          {time(p.region.endTime - p.region.startTime)}
         </p>
       </div>
     </>
@@ -68,7 +75,7 @@ function prepareRegions(regions: Region[], meta: ParsedMeta): RegionWithMeta[] {
 function RegionList() {
   const {
     actions: { moveToRegion },
-    data: { currentTime, regions, regionMeta },
+    data: { playState, currentTime, regions, regionMeta },
   } = useReaper();
 
   const isPlaying = createSelector(
@@ -87,9 +94,13 @@ function RegionList() {
         {(region) => (
           <button
             type="button"
-            class={`hover:brightness-125 relative grow flex h-10 overflow-clip btn-outlined my-1 px-3 ${
-              isPlaying(region) && "selected"
-            }`}
+            class={`
+              hover:brightness-125 relative grow flex h-10 overflow-clip btn-outlined my-1 px-3 
+              ${isPlaying(region) && "selected"}
+              ${isPlaying(region) && playState() === PlayState.Playing && "playing"}
+              ${isPlaying(region) && playState() === PlayState.Paused && "paused"}
+              ${isPlaying(region) && playState() === PlayState.Stopped && "stopped"}
+            `}
             style={`${region.color != null ? `background-color: ${region.color};` : ""}`}
             onClick={() => moveToRegion(region)}
           >
@@ -198,9 +209,10 @@ function RegionEditor() {
             </button>
             <button
               type="button"
-              class={`relative grow flex h-10 overflow-clip btn-outlined btn-checkbox my-1 px-3 ${
-                !region.meta?.disabled && "selected"
-              }`}
+              class={`
+                relative grow flex h-10 overflow-clip btn-outlined btn-checkbox my-1 px-3
+                ${!region.meta?.disabled && "selected"}
+              `}
               onclick={() =>
                 updateRegionMeta(toggleEnabled(processedRegions(), i()))
               }

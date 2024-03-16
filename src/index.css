@@ -54,10 +54,6 @@
             border-gray-200
             hover:bg-gray-100
             hover:text-blue-700
-            focus:z-10
-            focus:ring-4
-            focus:ring-gray-200
-            dark:focus:ring-gray-700
             dark:bg-gray-800
             dark:text-gray-400
             dark:border-gray-600
@@ -69,7 +65,24 @@
     @apply bg-gray-100
             text-blue-700
             dark:text-white
-            dark:bg-gray-700;
+            dark:bg-gray-700
+            z-10
+            ring-2
+            ring-slate-400;
+  }
+
+
+  .btn-outlined.playing {
+    @apply ring-emerald-700;
+  }
+
+
+  .btn-outlined.paused {
+    @apply ring-yellow-700;
+  }
+
+  .btn-outlined.stopped {
+    @apply ring-orange-700;
   }
 
   .btn-checkbox,
