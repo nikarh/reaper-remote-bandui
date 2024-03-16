@@ -1,4 +1,10 @@
-import { Region, PlayState, Track, Send, CurrentTime } from "./State";
+import {
+  type CurrentTime,
+  PlayState,
+  type Region,
+  type Send,
+  type Track,
+} from "./State";
 
 interface Setters {
   setPlayState(state: PlayState): void;
@@ -12,7 +18,7 @@ interface Setters {
 }
 
 function colorToRgba(color: string): string {
-  let parsed = (parseInt(color) | 0x1000000).toString(16);
+  const parsed = (Number.parseInt(color) | 0x1000000).toString(16);
   return `#${parsed.substring(parsed.length - 6)}`;
 }
 
@@ -31,16 +37,16 @@ export function onReply(
 ) {
   let regionStrings: string[][] = [];
 
-  let tracks: Track[] = [];
+  const tracks: Track[] = [];
   let hasTracks = false;
 
-  let sends: Send[] = [];
+  const sends: Send[] = [];
   let hasSends = false;
 
   const lines = result.split("\n");
-  for (let line of lines) {
-    var tokens = line.split("\t");
-    if (tokens.length == 0) {
+  for (const line of lines) {
+    const tokens = line.split("\t");
+    if (tokens.length === 0) {
       continue;
     }
 
@@ -51,11 +57,11 @@ export function onReply(
         }
 
         setCurrentTime({
-          seconds: parseFloat(tokens[2]),
+          seconds: Number.parseFloat(tokens[2]),
           beats: tokens[4],
         });
 
-        const state = parseInt(tokens[1]);
+        const state = Number.parseInt(tokens[1]);
         setPlayState(
           ((state) => {
             if (state & 1) return PlayState.Playing;
@@ -64,8 +70,8 @@ export function onReply(
           })(state),
         );
 
-        setRecording((state & 4) != 0);
-        setRepeat(tokens[3] == "1");
+        setRecording((state & 4) !== 0);
+        setRepeat(tokens[3] === "1");
 
         break;
       }
@@ -81,9 +87,9 @@ export function onReply(
         const newRegions = regionStrings.map(
           ([_cmd, name, id, startTime, endTime, color]) => ({
             name,
-            id: parseInt(id),
-            startTime: parseFloat(startTime),
-            endTime: parseFloat(endTime),
+            id: Number.parseInt(id),
+            startTime: Number.parseFloat(startTime),
+            endTime: Number.parseFloat(endTime),
             color: color === "0" ? undefined : colorToRgba(color),
           }),
         );
@@ -93,7 +99,7 @@ export function onReply(
       }
       case "TRACK": {
         hasTracks = true;
-        let [
+        const [
           _,
           id,
           name,
@@ -111,33 +117,35 @@ export function onReply(
         ] = tokens;
 
         tracks.push({
-          id: parseInt(id),
+          id: Number.parseInt(id),
           name,
-          volume: parseFloat(volume),
-          peakVolume: parseFloat(last_meter_peak),
+          volume: Number.parseFloat(volume),
+          peakVolume: Number.parseFloat(last_meter_peak),
           color: colorToRgba(color),
-          receiveCount: parseInt(receiveCount),
-          isOutput: hwOutCount != "0" && receiveCount != "0",
+          receiveCount: Number.parseInt(receiveCount),
+          isOutput: hwOutCount !== "0" && receiveCount !== "0",
         });
 
         break;
       }
       case "SEND": {
         hasSends = true;
-        let [_, trackTo, index, flags, volume, _pan, trackFrom] = tokens;
+        const [_, trackTo, index, flags, volume, _pan, trackFrom] = tokens;
 
         sends.push({
           index,
-          trackFrom: parseInt(trackFrom),
-          trackTo: parseInt(trackTo),
-          volume: parseFloat(volume),
-          mute: (parseInt(flags) & 8) != 0,
+          trackFrom: Number.parseInt(trackFrom),
+          trackTo: Number.parseInt(trackTo),
+          volume: Number.parseFloat(volume),
+          mute: (Number.parseInt(flags) & 8) !== 0,
         });
+        break;
       }
       case "PROJEXTSTATE": {
         if (tokens[1] === "BANDUI" && tokens[2] === "regions") {
           setRawRegionMeta(tokens[3]);
         }
+        break;
       }
     }
   }

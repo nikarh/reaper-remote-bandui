@@ -1,18 +1,18 @@
 import {
-  createMemo,
-  createSelector,
-  createSignal,
   For,
   Match,
   Switch,
+  createMemo,
+  createSelector,
+  createSignal,
 } from "solid-js";
 import { useReaper } from "../../Data/Context";
 import {
-  CurrentTime,
-  ParsedMeta,
+  type CurrentTime,
+  type ParsedMeta,
   PlayState,
-  Region,
-  RegionMeta,
+  type Region,
+  type RegionMeta,
 } from "../../Data/State";
 import { Icons } from "../UI/Icons";
 
@@ -64,12 +64,23 @@ function filterRegions(regions: RegionWithMeta[]): Region[] {
 }
 
 function prepareRegions(regions: Region[], meta: ParsedMeta): RegionWithMeta[] {
-  let result = regions.map((r) => ({ ...r, meta: meta[r.id] }));
+  const result = regions.map((r) => ({ ...r, meta: meta[r.id] }));
   result.sort(
     (a, b) => (a.meta?.index ?? 10000 + a.id) - (b.meta?.index ?? 10000 + b.id),
   );
 
   return result;
+}
+
+function playStateClass(playState: PlayState): string {
+  switch (playState) {
+    case PlayState.Playing:
+      return "playing";
+    case PlayState.Paused:
+      return "paused";
+    case PlayState.Stopped:
+      return "stopped";
+  }
 }
 
 function RegionList() {
@@ -96,12 +107,11 @@ function RegionList() {
             type="button"
             class={`
               hover:brightness-125 relative grow flex h-10 overflow-clip btn-outlined my-1 px-3 
-              ${isPlaying(region) && "selected"}
-              ${isPlaying(region) && playState() === PlayState.Playing && "playing"}
-              ${isPlaying(region) && playState() === PlayState.Paused && "paused"}
-              ${isPlaying(region) && playState() === PlayState.Stopped && "stopped"}
+              ${isPlaying(region) && `selected ${playStateClass(playState())}`}
             `}
-            style={`${region.color != null ? `background-color: ${region.color};` : ""}`}
+            style={`${
+              region.color != null ? `background-color: ${region.color};` : ""
+            }`}
             onClick={() => moveToRegion(region)}
           >
             {isPlaying(region) && (
@@ -121,9 +131,9 @@ function RegionList() {
 }
 
 function moveUp(regions: RegionWithMeta[], index: number): ParsedMeta {
-  let newRegions = [...regions];
+  const newRegions = [...regions];
 
-  let temp = newRegions[index];
+  const temp = newRegions[index];
   newRegions[index] = newRegions[index - 1];
   newRegions[index - 1] = temp;
 
@@ -139,9 +149,9 @@ function moveUp(regions: RegionWithMeta[], index: number): ParsedMeta {
 }
 
 function moveDown(regions: RegionWithMeta[], index: number): ParsedMeta {
-  let newRegions = [...regions];
+  const newRegions = [...regions];
 
-  let temp = newRegions[index];
+  const temp = newRegions[index];
   newRegions[index] = newRegions[index + 1];
   newRegions[index + 1] = temp;
 
@@ -157,7 +167,7 @@ function moveDown(regions: RegionWithMeta[], index: number): ParsedMeta {
 }
 
 function toggleEnabled(regions: RegionWithMeta[], index: number): ParsedMeta {
-  let parsedMeta = regions.reduce((acc, r, i) => {
+  const parsedMeta = regions.reduce((acc, r, i) => {
     acc[r.id] = {
       id: r.id,
       index: i,
@@ -192,7 +202,7 @@ function RegionEditor() {
             <button
               type="button"
               class="btn-round mr-1"
-              disabled={i() == 0}
+              disabled={i() === 0}
               onclick={() => updateRegionMeta(moveUp(processedRegions(), i()))}
             >
               <Icons.Up />
@@ -200,7 +210,7 @@ function RegionEditor() {
             <button
               type="button"
               class="btn-round mr-1"
-              disabled={i() == processedRegions().length - 1}
+              disabled={i() === processedRegions().length - 1}
               onclick={() =>
                 updateRegionMeta(moveDown(processedRegions(), i()))
               }
@@ -251,7 +261,7 @@ function Toggle(p: ToggleProps) {
       <span class="me-2 text-sm font-medium text-gray-900 dark:text-gray-300">
         Edit
       </span>
-      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
     </label>
   );
 }

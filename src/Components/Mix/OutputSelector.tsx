@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { Track } from "../../Data/State";
+import type { Track } from "../../Data/State";
 import { Select } from "../UI/Select";
 
 interface OutputSelectorProps {

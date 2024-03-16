@@ -1,11 +1,11 @@
 import {
+  For,
+  Show,
   createEffect,
   createMemo,
   createSignal,
-  For,
   observable,
   onCleanup,
-  Show,
 } from "solid-js";
 import { unwrap } from "solid-js/store";
 import { useReaper } from "../../Data/Context";
@@ -44,7 +44,7 @@ export function Mix() {
 
   const trackSends = () => {
     const _bindingHack = Object.keys(sends)[0];
-    return sends.filter((s) => s.trackTo == outputTrack().id);
+    return sends.filter((s) => s.trackTo === outputTrack().id);
   };
 
   createEffect(() => {
@@ -53,7 +53,7 @@ export function Mix() {
       return;
     }
 
-    let command = [...Array(track.receiveCount)]
+    const command = [...Array(track.receiveCount)]
       .map((_, i) => `GET/TRACK/${track.id}/SEND/-${i + 1}`)
       .join(";");
 

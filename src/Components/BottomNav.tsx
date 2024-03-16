@@ -1,9 +1,9 @@
-import { Setter } from "solid-js";
+import type { Setter } from "solid-js";
 import { Icons } from "./UI/Icons";
 
 export enum Section {
-  Control,
-  Mix,
+  Control = 0,
+  Mix = 1,
 }
 
 export function BottomNav(p: {
@@ -25,16 +25,20 @@ export function BottomNav(p: {
         <button
           type="button"
           onClick={() => p.onSelected(Section.Mix)}
-          class={p.section == Section.Mix ? selectedClass : selectableClass}
+          class={p.section === Section.Mix ? selectedClass : selectableClass}
         >
           <Icons.Mix
             class={
-              p.section == Section.Mix ? textSelectedClass : textSelectableClass
+              p.section === Section.Mix
+                ? textSelectedClass
+                : textSelectableClass
             }
           />
           <span
             class={`text-sm  ${
-              p.section == Section.Mix ? textSelectedClass : textSelectableClass
+              p.section === Section.Mix
+                ? textSelectedClass
+                : textSelectableClass
             }`}
           >
             Mix
@@ -43,18 +47,20 @@ export function BottomNav(p: {
         <button
           type="button"
           onClick={() => p.onSelected(Section.Control)}
-          class={p.section == Section.Control ? selectedClass : selectableClass}
+          class={
+            p.section === Section.Control ? selectedClass : selectableClass
+          }
         >
           <Icons.Control
             class={
-              p.section == Section.Control
+              p.section === Section.Control
                 ? textSelectedClass
                 : textSelectableClass
             }
           />
           <span
             class={`text-sm  ${
-              p.section == Section.Control
+              p.section === Section.Control
                 ? textSelectedClass
                 : textSelectableClass
             }`}

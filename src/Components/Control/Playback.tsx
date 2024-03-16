@@ -15,7 +15,7 @@ export function MainControl() {
           type="button"
           onClick={play}
           class={`btn-primary rounded-l w-14 ${
-            state() == PlayState.Playing && "selected"
+            state() === PlayState.Playing && "selected"
           }`}
         >
           <Icons.Play />
@@ -23,7 +23,9 @@ export function MainControl() {
         <button
           type="button"
           onClick={pause}
-          class={`btn-primary w-14 ${state() == PlayState.Paused && "selected"}`}
+          class={`btn-primary w-14 ${
+            state() === PlayState.Paused && "selected"
+          }`}
         >
           <Icons.Pause />
         </button>
@@ -31,7 +33,7 @@ export function MainControl() {
           type="button"
           onClick={stop}
           class={`btn-primary w-14 rounded-r ${
-            state() == PlayState.Stopped && "selected"
+            state() === PlayState.Stopped && "selected"
           }`}
         >
           <Icons.Stop />
@@ -42,7 +44,9 @@ export function MainControl() {
         <button
           type="button"
           onClick={record}
-          class={`btn-primary btn-primary-red w-14 rounded-l ${recording() && "selected"}`}
+          class={`btn-primary btn-primary-red w-14 rounded-l ${
+            recording() && "selected"
+          }`}
         >
           <Icons.Record />
         </button>

@@ -1,7 +1,7 @@
 export enum PlayState {
-  Playing,
-  Paused,
-  Stopped,
+  Playing = 0,
+  Paused = 1,
+  Stopped = 2,
 }
 
 export interface Track {

@@ -1,4 +1,4 @@
-import { Action, actionsToCommands, reduceActions } from "./Actions";
+import { type Action, actionsToCommands, reduceActions } from "./Actions";
 
 interface Subscription {
   subscribe(request: string, interval: number): () => void;
@@ -13,25 +13,21 @@ export function initializeClient(
   let ignoreResults = false;
   let delaySubscriptions: number | undefined = undefined;
 
-  let subscriptions: [string, number, number][] = [];
+  const subscriptions: [string, number, number][] = [];
   let actionQueue: Action[] = [];
   let timer: number | undefined = undefined;
 
   let promises = Promise.resolve();
 
   async function runQueue() {
-    let command = actionsToCommands(reduceActions(actionQueue));
+    const command = actionsToCommands(reduceActions(actionQueue));
     actionQueue = [];
-    if (command != "") {
-      try {
-        let result = await fetch(`/_/${command}`);
-        let text = await result.text();
-        if (!unmount) {
-          onReply(text);
-          delaySubscriptions = new Date().getTime() + 50;
-        }
-      } catch (e) {
-        throw e;
+    if (command !== "") {
+      const result = await fetch(`/_/${command}`);
+      const text = await result.text();
+      if (!unmount) {
+        onReply(text);
+        delaySubscriptions = new Date().getTime() + 50;
       }
     }
 
@@ -40,11 +36,11 @@ export function initializeClient(
 
   async function runSubscriptions() {
     let commands = "";
-    let now = new Date().getTime();
+    const now = new Date().getTime();
 
     if (delaySubscriptions == null || now > delaySubscriptions) {
       delaySubscriptions = undefined;
-      for (let sub of subscriptions) {
+      for (const sub of subscriptions) {
         if (now > sub[2]) {
           sub[2] = now + sub[1];
           commands += `;${sub[0]}`;
@@ -52,15 +48,11 @@ export function initializeClient(
       }
     }
 
-    if (commands != "") {
-      try {
-        let result = await fetch(`/_/${commands}`);
-        let text = await result.text();
-        if (!ignoreResults && !unmount) {
-          onReply(text);
-        }
-      } catch (e) {
-        throw e;
+    if (commands !== "") {
+      const result = await fetch(`/_/${commands}`);
+      const text = await result.text();
+      if (!ignoreResults && !unmount) {
+        onReply(text);
       }
     }
 
@@ -76,11 +68,11 @@ export function initializeClient(
   }
 
   function subscribe(request: string, interval: number) {
-    if (request == "") {
+    if (request === "") {
       return () => {};
     }
 
-    let subscription: [string, number, number] = [
+    const subscription: [string, number, number] = [
       request,
       interval,
       new Date().getTime(),
@@ -97,7 +89,7 @@ export function initializeClient(
     }
 
     actionQueue.push(action);
-    if (actionQueue.length == 1) {
+    if (actionQueue.length === 1) {
       promises = promises.then(() =>
         runQueue().catch((e) => {
           console.log("Request failed", e);
@@ -116,7 +108,7 @@ export function initializeClient(
       subscribe,
     },
     () => {
-      if (timer != undefined) {
+      if (timer !== undefined) {
         clearTimeout(timer);
       }
       ignoreResults = true;

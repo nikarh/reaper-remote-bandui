@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
-import { JSX } from "solid-js/jsx-runtime";
-import { Send, Track } from "../../Data/State";
+import type { JSX } from "solid-js/jsx-runtime";
+import type { Send, Track } from "../../Data/State";
 import { Range } from "../UI/Range";
 
 function levelToPercentage(level: number): number {
@@ -9,13 +9,13 @@ function levelToPercentage(level: number): number {
 
 function normalizedToDb(level: number): number {
   if (level < 0.00000002980232) {
-    return -Infinity;
+    return Number.NEGATIVE_INFINITY;
   }
   return Math.log(level) * 8.68588963806;
 }
 
 function dbToNormalized(level: number): number {
-  if (level == -Infinity) {
+  if (level === Number.NEGATIVE_INFINITY) {
     return 0;
   }
   return Math.exp(level / 8.68588963806);
