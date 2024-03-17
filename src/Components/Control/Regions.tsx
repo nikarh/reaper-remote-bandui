@@ -15,6 +15,7 @@ import {
   type RegionMeta,
 } from "../../Data/State";
 import { Icons } from "../UI/Icons";
+import { Toggle } from "../UI/Toggle";
 
 function progress(region: Region, currentTime: number): number {
   return Math.max(
@@ -41,12 +42,12 @@ function Progress(p: { region: Region; currentTime: CurrentTime }) {
   return (
     <>
       <div
-        class="absolute bottom-0 left-0 top-0 right-0 bg-black opacity-40"
-        style={`width: ${progress(p.region, p.currentTime.seconds)}%`}
+        class="absolute top-0 right-0 bottom-0 left-0 bg-black opacity-40"
+        style={{ width: `${progress(p.region, p.currentTime.seconds)}%` }}
       />
 
-      <div class="absolute top-0 bottom-0 right-0 flex items-center opacity-90 px-1">
-        <p class="text-xs text-gray-300 bg-neutral-900/40 rounded-lg p-1 font-mono">
+      <div class="absolute top-0 right-0 bottom-0 flex items-center px-1 opacity-90">
+        <p class="rounded-lg bg-neutral-900/40 p-1 font-mono text-gray-300 text-xs">
           {time(p.currentTime.seconds - p.region.startTime)} /{" "}
           {time(p.region.endTime - p.region.startTime)}
         </p>
@@ -105,21 +106,20 @@ function RegionList() {
         {(region) => (
           <button
             type="button"
-            class={`
-              hover:brightness-125 relative grow flex h-10 overflow-clip btn-outlined my-1 px-3 
-              ${isPlaying(region) && `selected ${playStateClass(playState())}`}
-            `}
-            style={`${
-              region.color != null ? `background-color: ${region.color};` : ""
+            class={`btn-outlined relative my-1 flex h-10 grow overflow-clip px-3 hover:brightness-125 ${
+              isPlaying(region) && `selected ${playStateClass(playState())}`
             }`}
+            style={
+              region.color != null ? { "background-color": region.color } : {}
+            }
             onClick={() => moveToRegion(region)}
           >
             {isPlaying(region) && (
               <Progress region={region} currentTime={currentTime()} />
             )}
 
-            <div class="absolute bottom-0 left-0.5 top-1 opacity-90">
-              <div class="text-base font-normal text-gray-700 dark:text-gray-200 bg-neutral-900/40 rounded-lg p-1">
+            <div class="absolute top-1 bottom-0 left-0.5 opacity-90">
+              <div class="rounded-lg bg-neutral-900/40 p-1 font-normal text-base text-gray-200">
                 {region.id}. {region.name}
               </div>
             </div>
@@ -219,10 +219,9 @@ function RegionEditor() {
             </button>
             <button
               type="button"
-              class={`
-                relative grow flex h-10 overflow-clip btn-outlined btn-checkbox my-1 px-3
-                ${!region.meta?.disabled && "selected"}
-              `}
+              class={`btn-outlined hover:text-gray-200 hover:bg-gray-600 relative my-1 flex h-10 grow overflow-clip px-3 ${
+                !region.meta?.disabled && "selected"
+              }`}
               onclick={() =>
                 updateRegionMeta(toggleEnabled(processedRegions(), i()))
               }
@@ -232,8 +231,8 @@ function RegionEditor() {
               </span>
 
               {!region.meta?.disabled && (
-                <div class="absolute top-0 bottom-0 right-0 items-center opacity-70 px-3 flex content-center">
-                  <Icons.Checked class="w-6 h-6 mr-1" />
+                <div class="absolute top-0 right-0 bottom-0 flex content-center items-center px-3 opacity-70">
+                  <Icons.Checked class="mr-1 h-6 w-6" />
                 </div>
               )}
             </button>
@@ -244,39 +243,17 @@ function RegionEditor() {
   );
 }
 
-interface ToggleProps {
-  value: boolean;
-  onChange(value: boolean): void;
-}
-
-function Toggle(p: ToggleProps) {
-  return (
-    <label class="inline-flex items-center cursor-pointer">
-      <input
-        type="checkbox"
-        checked={p.value}
-        onChange={(e) => p.onChange(e.currentTarget.checked)}
-        class="sr-only peer"
-      />
-      <span class="me-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-        Edit
-      </span>
-      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
-    </label>
-  );
-}
-
 export function Regions() {
   const [isEditing, setEditing] = createSignal(false);
 
   return (
     <div>
-      <h2 class="mb-2 text-m font-extrabold leading-none tracking-tight text-gray-900 dark:text-white flex items-center">
+      <h2 class="mb-2 flex items-center font-extrabold text-m text-white leading-none tracking-tight">
         <span class="grow">
           {isEditing() && "Regions"}
           {!isEditing() && "Move to Region"}
         </span>
-        <Toggle value={isEditing()} onChange={setEditing} />
+        <Toggle label="Edit" value={isEditing()} onChange={setEditing} />
       </h2>
 
       {isEditing() && <RegionEditor />}

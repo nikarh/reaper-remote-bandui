@@ -19,7 +19,7 @@ function App() {
 
   return (
     <ReaperProvider interval={50} subscriptions={SUBSCRIPTIONS}>
-      <div class="flex flex-col h-full justify-between">
+      <div class="flex h-full flex-col justify-between">
         <div class="grow overflow-y-scroll">
           {section() === Section.Control && <Control />}
           {section() === Section.Mix && <Mix />}

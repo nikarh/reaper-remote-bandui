@@ -12,7 +12,7 @@ interface SelectProps<T> {
 export function Select<T>(p: SelectProps<T>) {
   return (
     <select
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      class="block w-full rounded-lg border border-gray-600 bg-gray-700 p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
       onChange={(e) =>
         p.onChange(Number.parseInt((e.target as HTMLSelectElement).value))
       }

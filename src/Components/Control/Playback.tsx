@@ -14,7 +14,7 @@ export function MainControl() {
         <button
           type="button"
           onClick={play}
-          class={`btn-primary rounded-l w-14 ${
+          class={`btn-primary w-14 rounded-l ${
             state() === PlayState.Playing && "selected"
           }`}
         >

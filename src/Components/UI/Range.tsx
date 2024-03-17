@@ -23,7 +23,7 @@ export function Range(p: RangeProps) {
   });
 
   return (
-    <div class="range relative w-full flex h-9 overflow-clip">
+    <div class="range relative flex h-9 w-full overflow-clip">
       <input
         type="range"
         min={p.min}
@@ -39,16 +39,16 @@ export function Range(p: RangeProps) {
           p.onInput?.(value);
         }}
         step={p.step}
-        class={"relative w-full h-full bg-gray-200 dark:bg-gray-600"}
+        class={"relative h-full w-full bg-gray-600"}
       />
 
       <div
-        class={"absolute left-0 top-0 bottom-0 pointer-events-none"}
-        style={`width: ${valueToPercentage(p.min, p.max, progress())}%;`}
+        class={"pointer-events-none absolute top-0 bottom-0 left-0"}
+        style={{ width: `${valueToPercentage(p.min, p.max, progress())}%` }}
       >
         <div
           class={`range-progress-body h-full ${p.class}`}
-          style={`${p.color != null ? `background-color: ${p.color};` : ""}`}
+          style={p.color != null ? { "background-color": p.color } : {}}
         />
       </div>
     </div>

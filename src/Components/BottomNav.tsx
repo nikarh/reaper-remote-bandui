@@ -11,17 +11,17 @@ export function BottomNav(p: {
   onSelected: Setter<Section>;
 }) {
   const selectableClass =
-    "inline-flex flex-col items-center justify-center px-5 hover:bg-gray-100 dark:hover:bg-gray-700 group";
+    "inline-flex flex-col items-center justify-center px-5 hover:bg-gray-100 hover:bg-gray-700 group";
   const selectedClass =
-    "inline-flex flex-col items-center justify-center px-5 bg-gray-50 dark:bg-gray-800 group";
+    "inline-flex flex-col items-center justify-center px-5 bg-gray-50 bg-gray-800 group";
 
   const textSelectableClass =
-    "text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500";
+    "text-gray-500 text-gray-400 group-hover:text-blue-600 group-hover:text-blue-500";
   const textSelectedClass = "text-blue-600 text-blue-500";
 
   return (
-    <div class="shrink-0 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-      <div class="grid h-full max-w-lg grid-cols-2 mx-auto">
+    <div class="h-16 w-full shrink-0 border-gray-600 border-t bg-gray-700">
+      <div class="mx-auto grid h-full max-w-lg grid-cols-2">
         <button
           type="button"
           onClick={() => p.onSelected(Section.Mix)}
@@ -35,7 +35,7 @@ export function BottomNav(p: {
             }
           />
           <span
-            class={`text-sm  ${
+            class={`text-sm ${
               p.section === Section.Mix
                 ? textSelectedClass
                 : textSelectableClass
@@ -59,7 +59,7 @@ export function BottomNav(p: {
             }
           />
           <span
-            class={`text-sm  ${
+            class={`text-sm ${
               p.section === Section.Control
                 ? textSelectedClass
                 : textSelectableClass
