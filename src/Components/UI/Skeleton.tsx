@@ -8,11 +8,9 @@ interface SkeletonProps {
 export function Skeleton(p: SkeletonProps) {
   return (
     <>
-      <nav class="p-2 border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 w-full">
-        {p.navigation}
-      </nav>
-      <div class="p-2 pt-4 w-full flex items-center flex-col">
-        <div class="max-w-md w-full">{p.children}</div>
+      <nav class="w-full border-gray-700 bg-gray-800 p-2">{p.navigation}</nav>
+      <div class="flex w-full flex-col items-center p-2 pt-4">
+        <div class="w-full max-w-md">{p.children}</div>
       </div>
     </>
   );

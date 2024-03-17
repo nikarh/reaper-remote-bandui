@@ -15,8 +15,10 @@ import { OutputControl, SendControl } from "./SendControl";
 
 function NoOutputsFound() {
   return (
-    <div class="max-w-md w-full p-4 font-medium text-left text-gray-500 border border-gray-200 rounded-xl dark:border-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-800">
-      No output tracks
+    <div class="flex justify-center grow">
+      <div class="w-full max-w-md rounded-xl border border-gray-700 bg-gray-800 p-4 text-left font-medium text-gray-400 mt-2">
+        No output tracks
+      </div>
     </div>
   );
 }

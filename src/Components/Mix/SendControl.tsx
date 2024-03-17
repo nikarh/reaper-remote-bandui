@@ -23,10 +23,14 @@ function dbToNormalized(level: number): number {
 
 function Level(p: { level: number; color: string }) {
   return (
-    <div class="w-full bg-gray-200 h-1 dark:bg-gray-600/50">
+    <div class="h-1 w-full bg-gray-200 bg-gray-600/50">
       <div
         class="h-full rounded-full"
-        style={`width: ${p.level}%; background-color: ${p.color}; filter: invert(0.9);`}
+        style={{
+          width: `${p.level}%`,
+          "background-color": p.color,
+          filter: "invert(0.9)",
+        }}
       />
     </div>
   );
@@ -44,7 +48,7 @@ function Slider(p: SliderProps) {
   const [input, setInput] = createSignal<number | undefined>(undefined);
 
   return (
-    <div class="relative grow flex rounded-lg overflow-clip">
+    <div class="relative flex grow overflow-clip rounded-lg">
       <Range
         min={0}
         max={1}
@@ -58,25 +62,25 @@ function Slider(p: SliderProps) {
         color={p.color}
       />
       {p.label != null && (
-        <div class="absolute bottom-0 left-0.5 top-0.5 pointer-events-none opacity-70">
-          <div class="font-normal text-gray-700 dark:text-gray-200 bg-neutral-900/40 rounded-lg p-1">
+        <div class="pointer-events-none absolute top-0.5 bottom-0 left-0.5 opacity-70">
+          <div class="rounded-lg bg-neutral-900/40 p-1 font-normal text-gray-200">
             {p.label}
           </div>
         </div>
       )}
 
-      <div class="absolute right-2 top-0 bottom-0 pointer-events-none flex items-center opacity-70">
+      <div class="pointer-events-none absolute top-0 right-2 bottom-0 flex items-center opacity-70">
         <p
-          class={`text-xs text-white ${
+          class={`text-white text-xs ${
             input() != null ? "text-gray-400" : ""
-          } bg-neutral-900/40 rounded-lg p-1 font-mono`}
+          } rounded-lg bg-neutral-900/40 p-1 font-mono`}
         >
           {input() == null && normalizedToDb(p.value).toFixed(2)}
           {input() != null && normalizedToDb(input() ?? 0).toFixed(2)} dB
         </p>
       </div>
 
-      <div class="absolute left-0 bottom-0 right-0 pointer-events-none">
+      <div class="pointer-events-none absolute right-0 bottom-0 left-0">
         <Level level={p.peak} color={p.color ?? "red"} />
       </div>
     </div>
@@ -92,12 +96,11 @@ interface SendControlProps {
 
 export function SendControl(p: SendControlProps) {
   return (
-    <div class="my-3 p-2 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
+    <div class="my-3 flex rounded-lg border-gray-700 bg-gray-800 p-2 shadow">
       <Slider
         label={
           <>
-            {p.track.name}{" "}
-            <span class="dark:text-gray-400">({p.track.id})</span>
+            {p.track.name} <span class="text-gray-400">({p.track.id})</span>
           </>
         }
         value={p.send.volume}
@@ -107,9 +110,9 @@ export function SendControl(p: SendControlProps) {
       />
       <button
         type="button"
-        class={`text-xs ml-5 px-7 py-2 ${
+        class={`${
           p.send.mute ? "btn-mute-red" : "btn-mute"
-        }`}
+        } ml-5 px-7 py-2 text-xs`}
         onClick={p.onMuteToggle}
       >
         M
@@ -125,13 +128,13 @@ interface OutputControlProps {
 
 export function OutputControl(p: OutputControlProps) {
   return (
-    <div class="p-2 mb-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-700">
-      <div class="flex mb-1 font-normal text-gray-700 dark:text-gray-400">
+    <div class="mb-3 rounded-lg border border-gray-700 bg-gray-700 p-2 shadow">
+      <div class="mb-1 flex font-normal text-gray-400">
         <div class="flex-1">
           <b>Output:</b> {p.track.name}{" "}
-          <span class="dark:text-gray-500">({p.track.id})</span>
+          <span class="text-gray-500">({p.track.id})</span>
         </div>
-        <div class="font-small text-gray-500 dark:text-gray-500">
+        <div class="font-small text-gray-500">
           Peak: {(p.track.peakVolume / 10).toFixed(2)} dB
         </div>
       </div>

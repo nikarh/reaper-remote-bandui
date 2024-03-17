@@ -11,8 +11,8 @@ interface BottomNavigationProps<Item> {
 export function BottomNavigation<Item>(p: BottomNavigationProps<Item>) {
   return (
     <div class="bottom-navigation">
-      <div class="max-w-lg mx-auto grow h-full">
-        <div class="grid grid-flow-col auto-cols-auto h-full">
+      <div class="mx-auto h-full max-w-lg grow">
+        <div class="grid h-full auto-cols-auto grid-flow-col">
           <For each={p.items}>
             {(item) => (
               <button
