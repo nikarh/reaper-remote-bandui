@@ -10,6 +10,7 @@ import { useReaper } from "../../Data/Context";
 import {
   type CurrentTime,
   type Marker,
+  type NavigationMarker,
   PlayState,
   type Region,
   type RegionMeta,
@@ -110,10 +111,79 @@ function textColor(color?: string): "text-white" | "text-black" {
   return "text-white";
 }
 
+function previousMarker(
+  currentTime: CurrentTime,
+  markers: NavigationMarker[],
+): NavigationMarker | undefined {
+  return markers.findLast((m) => m.startTime < currentTime.seconds);
+}
+
+function nextMarker(
+  currentTime: CurrentTime,
+  markers: NavigationMarker[],
+): NavigationMarker | undefined {
+  return markers.find((m) => m.startTime > currentTime.seconds);
+}
+
+function MarkerData(p: {
+  marker?: NavigationMarker;
+  direction: "previous" | "next";
+}) {
+  return (
+    <div class="flex text-xs justify-center">
+      <Switch fallback={""}>
+        <Match when={p.marker == null && p.direction === "previous"}>
+          <span>Project start</span>
+        </Match>
+        <Match when={p.marker == null && p.direction === "next"}>
+          <span>Project end</span>
+        </Match>
+        <Match when={p.marker?.kind === "marker"}>
+          <span
+            class={`bg-red-800 opacity-80 rounded-md px-1 ${textColor(
+              p.marker?.color,
+            )}`}
+            style={{ "background-color": p.marker?.color }}
+          >
+            {p.marker?.id} - {p.marker?.name || "untitled"}
+          </span>
+        </Match>
+        <Match when={p.marker?.kind === "regionStart"}>
+          <span
+            class={`bg-gray-800 opacity-80 rounded-sm px-1 ${textColor(
+              p.marker?.color,
+            )}`}
+            style={{ "background-color": p.marker?.color }}
+          >
+            Start region {p.marker?.id} - {p.marker?.name || "untitled"}
+          </span>
+        </Match>
+        <Match when={p.marker?.kind === "regionEnd"}>
+          <span
+            class={`bg-gray-800 opacity-80 rounded-sm px-1 ${textColor(
+              p.marker?.color,
+            )}`}
+            style={{ "background-color": p.marker?.color }}
+          >
+            End region {p.marker?.id} - {p.marker?.name || "untitled"}
+          </span>
+        </Match>
+      </Switch>
+    </div>
+  );
+}
+
 function RegionList() {
   const {
     actions: { moveToRegion, moveToMarker },
-    data: { playState, currentTime, regions, regionMeta, regionMarkers },
+    data: {
+      playState,
+      currentTime,
+      regions,
+      regionMeta,
+      markers,
+      regionMarkers,
+    },
   } = useReaper();
 
   const isPlaying = createSelector(
@@ -129,24 +199,36 @@ function RegionList() {
   return (
     <div>
       <div
-        class="flex justify-center rounded-md shadow-sm h-10 mb-4"
+        class="flex justify-center rounded-md shadow-sm h-10 mb-6"
         role="group"
       >
         <button
-          class="flex items-center btn-primary border rounded-none rounded-l basis-1/2"
+          class="flex flex-col btn-primary h-12 border rounded-none rounded-l basis-1/2"
           type="button"
           onclick={() => moveToMarker("previous")}
         >
-          <Icons.Left />
-          <span class="flex-grow">Previous marker</span>
+          <div class="flex items-center flex-grow">
+            <Icons.Left />
+            <span class="flex-grow">Previous marker</span>
+          </div>
+          <MarkerData
+            marker={previousMarker(currentTime(), markers())}
+            direction="previous"
+          />
         </button>
         <button
-          class="flex items-center btn-primary border border-l-0 rounded-none rounded-r basis-1/2"
+          class="flex flex-col btn-primary h-12 border border-l-0 rounded-none rounded-r basis-1/2"
           type="button"
           onclick={() => moveToMarker("next")}
         >
-          <span class="flex-grow">Next marker</span>
-          <Icons.Right />
+          <div class="flex items-center flex-grow">
+            <span class="flex-grow">Next marker</span>
+            <Icons.Right />
+          </div>
+          <MarkerData
+            marker={nextMarker(currentTime(), markers())}
+            direction="next"
+          />
         </button>
       </div>
 
@@ -158,9 +240,7 @@ function RegionList() {
               class={`btn-outlined relative my-1 flex h-10 grow overflow-clip px-3 hover:brightness-125 ${
                 isPlaying(region) && `selected ${playStateClass(playState())}`
               }`}
-              style={
-                region.color != null ? { "background-color": region.color } : {}
-              }
+              style={{ "background-color": region.color }}
               onClick={() => moveToRegion(region)}
             >
               {isPlaying(region) && (

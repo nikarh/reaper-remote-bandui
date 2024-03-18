@@ -16,6 +16,7 @@ import { onReply } from "./ResponseParser";
 import {
   type CurrentTime,
   type Marker,
+  type NavigationMarker,
   PlayState,
   type Region,
   type RegionsMarkers,
@@ -31,6 +32,7 @@ interface Reaper {
     recording: Accessor<boolean>;
     repeat: Accessor<boolean>;
     regions: Accessor<Region[]>;
+    markers: Accessor<NavigationMarker[]>;
     regionMeta: Accessor<RegionsMeta>;
     regionMarkers: Accessor<RegionsMarkers>;
     tracks: Store<Track[]>;
@@ -59,6 +61,7 @@ const ReaperContext = createContext<Reaper>({
     recording: () => false,
     repeat: () => false,
     regions: () => [],
+    markers: () => [],
     regionMeta: () => ({}),
     regionMarkers: () => ({}),
     tracks: [],
@@ -150,6 +153,42 @@ export function ReaperProvider(p: ReaperProps) {
       }, {} as RegionsMarkers),
   );
 
+  const markersWithRegionBounds = createMemo<NavigationMarker[]>(() => {
+    const allMarkers: NavigationMarker[] = markers().map((marker) => ({
+      ...marker,
+      kind: "marker",
+    }));
+
+    const regionBounds: NavigationMarker[] = regions().flatMap((region) => {
+      return [
+        {
+          kind: "regionStart",
+          id: region.id,
+          startTime: region.startTime,
+          name: region.name,
+          color: region.color,
+        },
+        {
+          kind: "regionEnd",
+          id: region.id,
+          startTime: region.endTime,
+          name: region.name,
+          color: region.color,
+        },
+      ];
+    });
+
+    for (const marker of regionBounds) {
+      if (allMarkers.find((m) => m.startTime === marker.startTime) == null) {
+        allMarkers.push(marker);
+      }
+    }
+
+    allMarkers.sort((a, b) => a.startTime - b.startTime);
+
+    return allMarkers;
+  });
+
   createComputed(() => setRegionMeta(parseRegionMeta(regionRawMeta())));
 
   const [client, destroyClient] = initializeClient(p.interval, (result) =>
@@ -182,6 +221,7 @@ export function ReaperProvider(p: ReaperProps) {
       recording,
       repeat,
       regions,
+      markers: markersWithRegionBounds,
       regionMeta,
       regionMarkers,
       tracks,

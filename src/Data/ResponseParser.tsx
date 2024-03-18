@@ -92,8 +92,10 @@ export function onReply(
           ([_cmd, name, id, startTime, endTime, color]) => ({
             name,
             id: Number.parseInt(id),
-            startTime: Number.parseFloat(startTime),
-            endTime: Number.parseFloat(endTime),
+            startTime: Number.parseFloat(
+              Number.parseFloat(startTime).toFixed(10),
+            ),
+            endTime: Number.parseFloat(Number.parseFloat(endTime).toFixed(10)),
             color: color === "0" ? undefined : colorToRgba(color),
           }),
         );
@@ -114,7 +116,9 @@ export function onReply(
           ([_cmd, name, id, startTime, color]) => ({
             name,
             id: Number.parseInt(id),
-            startTime: Number.parseFloat(startTime),
+            startTime: Number.parseFloat(
+              Number.parseFloat(startTime).toFixed(10),
+            ),
             color: color === "0" ? undefined : colorToRgba(color),
           }),
         );
