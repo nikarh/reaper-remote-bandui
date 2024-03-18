@@ -119,7 +119,8 @@ function RegionList() {
   const isPlaying = createSelector(
     currentTime,
     (r: Region, { seconds: t }) =>
-      t >= Math.floor(r.startTime) && t <= Math.ceil(r.endTime),
+      Math.max(t, 0) >= Math.floor(r.startTime) &&
+      Math.max(t, 0) <= Math.ceil(r.endTime),
   );
 
   const processedRegions = createMemo(() =>
