@@ -16,8 +16,8 @@ To simplify mixing we use a web control feature of REAPER and each band member d
 This project aims to fix that by providing a mobile-first web UI that provides a way to:
 
 - Control playback
-- Switch between songs
-- Mix inputs for different band members
+- Switch between songs (regions) and their parts (markers)
+- Do an individual mix for each band member
 
 ## Repository contents
 
@@ -35,12 +35,12 @@ This repository contains
 
 ### Building
 
-Clone the project, install the dependencies and build it with an npm command.
+Clone the project, install the dependencies, and build it with an npm command.
 
 ```
 git clone https://github.com/nikarh/reaper-remote-bandui.git
 npm i
-npm run dist
+npm run build
 ```
 
 The built HTML file will be in `./dist/index.html`.
@@ -48,27 +48,27 @@ The built HTML file will be in `./dist/index.html`.
 ### Development
 
 This project does not have a mock backend, so you actually need to run REAPER with the provided `Mother Project`, if you want to see anything sensible.
-By default proxy server expects REAPER to be running on port `8881`.
+By default proxy server expects REAPER to be running on port `8080`.
 
 ## REAPER project layout
 
 For this UI to work, your REAPER project must follow some rules.
 
-1. All songs are marked as regions from the beginning to the end. The region must have a name.
+1. All songs are marked as regions from the beginning to the end. The region must have a name (song name). Regions should not overlap.
 2. Tracks for which mixing is possible must have both
 
    - A hardware output
    - At least one send
 
-   During the mixing process, the UI would change the gain of individual sends.
+   The mixing process is implemented by changing the gain of individual sends.
 
-The example project has some more tracks so here is a brief explanation of their purpose.
+The example project has more tracks than just inputs and outputs so here is a brief explanation of their purpose.
 
-- A MIDI track is used for song markers (like chorus and verse). In my experience using REAPER markers for that would cause too much of a mess
-- Click track is used for `Click source` items or simply put metronome. The global metronome usually doesn't cut it, because each band member usually prefers a different loudness for it (e.g. it's very important for a drummer but not so much for a vocalist)
-- The audio group is for tracks where you would put pre-recorded WAV files, like backtracks and vocal backtracks
-- The input group is for tracks having a physical input source, like a guitar or a microphone. If any additional processing is needed (compression, eq, reverb), it should be put on these tracks
-- The output group is for tracks with physical outputs. All of these tracks have plugins for basic hearing safety - a `-10 dB` gain and a brick-wall limiter at `0 dB`. These tracks have "Receives" from input group tracks and audio group tracks.
+- A MIDI track is used for song markers (like chorus and verse). In my experience using REAPER markers for that would cause too much of a mess (though markers are also supported by this UI).
+- Click track is used for `Click source` items or simply put metronome. The global metronome usually doesn't cut it, because each band member usually prefers a different loudness for it (e.g. it's very important for a drummer but not so much for a vocalist).
+- The `Audio` group is for tracks where you would put pre-recorded WAV files, like backtracks and vocal backtracks.
+- The `Inputs` group is for tracks having a physical input source, like a guitar or a microphone. If any additional processing is needed (compression, eq, reverb), it should be put on these tracks.
+- The `Outputs` group is for tracks with physical outputs. All of these tracks have plugins for basic hearing safety - a `-10 dB` gain and a brick-wall limiter at `0 dB`. These tracks have "Receives" from input group tracks and audio group tracks.
 
 ## Notes
 
