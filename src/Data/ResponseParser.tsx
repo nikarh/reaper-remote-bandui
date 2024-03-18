@@ -1,5 +1,6 @@
 import {
   type CurrentTime,
+  type Marker,
   PlayState,
   type Region,
   type Send,
@@ -12,6 +13,7 @@ interface Setters {
   setRepeat(repeat: boolean): void;
   setCurrentTime(time: CurrentTime): void;
   setRegions(regions: Region[]): void;
+  setMarkers(markers: Marker[]): void;
   setTracks(tracks: Track[]): void;
   setSends(sends: Send[]): void;
   setRawRegionMeta(meta: string): void;
@@ -30,12 +32,14 @@ export function onReply(
     setRepeat,
     setCurrentTime,
     setRegions,
+    setMarkers,
     setTracks,
     setSends,
     setRawRegionMeta,
   }: Setters,
 ) {
   let regionStrings: string[][] = [];
+  let markerStrings: string[][] = [];
 
   const tracks: Track[] = [];
   let hasTracks = false;
@@ -95,6 +99,27 @@ export function onReply(
         );
 
         setRegions(newRegions);
+        break;
+      }
+      case "MARKER_LIST": {
+        markerStrings = [];
+        break;
+      }
+      case "MARKER": {
+        markerStrings.push(tokens);
+        break;
+      }
+      case "MARKER_LIST_END": {
+        const newMarkers = markerStrings.map(
+          ([_cmd, name, id, startTime, color]) => ({
+            name,
+            id: Number.parseInt(id),
+            startTime: Number.parseFloat(startTime),
+            color: color === "0" ? undefined : colorToRgba(color),
+          }),
+        );
+
+        setMarkers(newMarkers);
         break;
       }
       case "TRACK": {

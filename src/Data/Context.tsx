@@ -15,9 +15,11 @@ import { initializeClient } from "./ClientLoop";
 import { onReply } from "./ResponseParser";
 import {
   type CurrentTime,
-  type ParsedMeta,
+  type Marker,
   PlayState,
   type Region,
+  type RegionsMarkers,
+  type RegionsMeta,
   type Send,
   type Track,
 } from "./State";
@@ -29,18 +31,20 @@ interface Reaper {
     recording: Accessor<boolean>;
     repeat: Accessor<boolean>;
     regions: Accessor<Region[]>;
-    regionMeta: Accessor<ParsedMeta>;
+    regionMeta: Accessor<RegionsMeta>;
+    regionMarkers: Accessor<RegionsMarkers>;
     tracks: Store<Track[]>;
     sends: Store<Send[]>;
   };
   actions: {
     subscribe(request: string, interval: number): () => void;
     moveToRegion(region: Region): void;
+    moveToMarker(marker: "previous" | "next"): void;
     toggleSendMute(send: Send): void;
     toggleRepeat(): void;
     setSendVolume(send: Send, volume: number): void;
     setOutputVolume(id: number, volume: number): void;
-    updateRegionMeta(meta: ParsedMeta): void;
+    updateRegionMeta(meta: RegionsMeta): void;
     play(): void;
     pause(): void;
     stop(): void;
@@ -56,12 +60,14 @@ const ReaperContext = createContext<Reaper>({
     repeat: () => false,
     regions: () => [],
     regionMeta: () => ({}),
+    regionMarkers: () => ({}),
     tracks: [],
     sends: [],
   },
   actions: {
     subscribe: () => () => {},
     moveToRegion: () => {},
+    moveToMarker: () => {},
     toggleSendMute: () => {},
     toggleRepeat: () => {},
     setSendVolume: () => {},
@@ -83,7 +89,7 @@ export interface ReaperProps {
   children: JSX.Element;
 }
 
-function parseRegionMeta(meta: string): ParsedMeta {
+function parseRegionMeta(meta: string): RegionsMeta {
   const parsed = meta.split(",").map((item, index) => {
     const disabled = item.length > 0 && item[0] === "0";
     const id = Number.parseInt(item.slice(1), 10);
@@ -95,13 +101,13 @@ function parseRegionMeta(meta: string): ParsedMeta {
     };
   });
 
-  return parsed.reduce((acc: ParsedMeta, next) => {
+  return parsed.reduce((acc: RegionsMeta, next) => {
     acc[next.id] = next;
     return acc;
   }, {});
 }
 
-function serializeRegionMeta(meta: ParsedMeta): string {
+function serializeRegionMeta(meta: RegionsMeta): string {
   const values = Object.values(meta);
   values.sort((a, b) => a.index - b.index);
   return values
@@ -120,11 +126,29 @@ export function ReaperProvider(p: ReaperProps) {
   const [regions, setRegions] = createSignal<Region[]>([], {
     equals: deepEqual,
   });
+  const [markers, setMarkers] = createSignal<Marker[]>([], {
+    equals: deepEqual,
+  });
   const [tracks, setTracks] = createStore<Track[]>([]);
   const [sends, setSends] = createStore<Send[]>([]);
 
   const [regionRawMeta, setRawRegionMeta] = createSignal<string>("");
-  const [regionMeta, setRegionMeta] = createSignal<ParsedMeta>({});
+  const [regionMeta, setRegionMeta] = createSignal<RegionsMeta>({});
+
+  const regionMarkers = createMemo<RegionsMarkers>(() =>
+    regions()
+      .map((region) => ({
+        id: region.id,
+        markers: markers().filter(
+          ({ startTime }) =>
+            startTime >= region.startTime && startTime <= region.endTime,
+        ),
+      }))
+      .reduce((acc, { id, markers }) => {
+        acc[id] = markers;
+        return acc;
+      }, {} as RegionsMarkers),
+  );
 
   createComputed(() => setRegionMeta(parseRegionMeta(regionRawMeta())));
 
@@ -135,6 +159,7 @@ export function ReaperProvider(p: ReaperProps) {
       setRecording,
       setCurrentTime,
       setRegions,
+      setMarkers,
       setTracks: (tracks) => {
         setTracks(reconcile(tracks));
       },
@@ -158,6 +183,7 @@ export function ReaperProvider(p: ReaperProps) {
       repeat,
       regions,
       regionMeta,
+      regionMarkers,
       tracks,
       sends,
     },
@@ -180,6 +206,12 @@ export function ReaperProvider(p: ReaperProps) {
       moveToRegion(region) {
         client.run(
           { type: "Move", pos: region.startTime, end: region.endTime },
+          false,
+        );
+      },
+      moveToMarker(marker) {
+        client.run(
+          { type: marker === "previous" ? "PreviousMarker" : "NextMarker" },
           false,
         );
       },
