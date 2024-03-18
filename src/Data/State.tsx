@@ -30,13 +30,22 @@ export interface Region {
   color?: string;
 }
 
+export interface Marker {
+  id: number;
+  name: string;
+  startTime: number;
+  color?: string;
+}
+
 export interface RegionMeta {
   id: number;
   index: number;
   disabled: boolean;
 }
 
-export type ParsedMeta = { [k: number]: RegionMeta };
+export type RegionsMeta = Record<number, RegionMeta>;
+
+export type RegionsMarkers = Record<number, Marker[]>;
 
 export interface CurrentTime {
   seconds: number;

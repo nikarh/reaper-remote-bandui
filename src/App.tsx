@@ -10,7 +10,7 @@ const SUBSCRIPTIONS = [
   { request: "TRANSPORT", interval: 100 },
   // Query every 100ms for peak levels
   { request: "TRACK", interval: 100 },
-  { request: "REGION", interval: 4000 },
+  { request: "REGION;MARKER", interval: 4000 },
   { request: "GET/PROJEXTSTATE/BANDUI/regions", interval: 4000 },
 ];
 

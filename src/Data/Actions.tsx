@@ -45,6 +45,14 @@ interface SetRegionsMeta {
   value: string;
 }
 
+interface PreviousMarker {
+  type: "PreviousMarker";
+}
+
+interface NextMarker {
+  type: "NextMarker";
+}
+
 export type Action =
   | PlayAction
   | PauseAction
@@ -55,7 +63,9 @@ export type Action =
   | SetSendVolumeAction
   | ToggleSendMuteAction
   | ToggleRepeatAction
-  | SetRegionsMeta;
+  | SetRegionsMeta
+  | PreviousMarker
+  | NextMarker;
 
 export function reduceActions(actions: Action[]): Action[] {
   const latest: { [k: string]: Action } = {};
@@ -132,6 +142,10 @@ export function actionsToCommands(actions: Action[]): string {
           return "1013;TRANSPORT";
         case "ToggleRepeat":
           return "1068;TRANSPORT";
+        case "PreviousMarker":
+          return "40172;TRANSPORT";
+        case "NextMarker":
+          return "40173;TRANSPORT";
         case "Move":
           return `SET/POS/${action.end};40626;SET/POS/${action.pos};40625;TRANSPORT`;
         case "SetTrackVolume":
