@@ -36,7 +36,8 @@
     @apply text-white
            focus:ring-red-700
            border-red-200
-           bg-red-500;
+           bg-red-500
+           hover:bg-red-600;
   }
 
 
