@@ -11,7 +11,7 @@
       flex
       border-t
     bg-gray-700
-    border-gray-600;
+    border-gray-900;
   }
 
   .bottom-navigation button:not(.selected) {
