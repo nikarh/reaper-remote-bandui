@@ -197,11 +197,9 @@ export function useNextMarker() {
   });
 }
 
-export function textColor(color?: string): "text-white" | "text-black" {
-  if (color == null) {
-    return "text-white";
-  }
+const COLOR_CACHE: Record<string, "text-white" | "text-black"> = {};
 
+function calculateTextColor(color: string): "text-white" | "text-black" {
   const squareDist =
     color
       .match(/^#(..)(..)(..)$/)
@@ -214,4 +212,18 @@ export function textColor(color?: string): "text-white" | "text-black" {
   }
 
   return "text-white";
+}
+
+export function textColor(color?: string): "text-white" | "text-black" {
+  if (color == null) {
+    return "text-white";
+  }
+
+  if (COLOR_CACHE[color] != null) {
+    return COLOR_CACHE[color];
+  }
+
+  const result = calculateTextColor(color);
+  COLOR_CACHE[color] = result;
+  return result;
 }
