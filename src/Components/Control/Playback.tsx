@@ -70,7 +70,7 @@ export function MainControl() {
   const nextMarker = useNextMarker();
 
   return (
-    <div class="flex flex-col justify-center space-y-4">
+    <div class="flex flex-col justify-center space-y-2">
       <div class="flex justify-center space-x-4">
         <button
           type="button"
