@@ -16,6 +16,7 @@ import { onReply } from "./ResponseParser";
 import {
   type CurrentTime,
   type Marker,
+  type NavigationMarker,
   PlayState,
   type Region,
   type RegionsMarkers,
@@ -39,7 +40,7 @@ interface Reaper {
   actions: {
     subscribe(request: string, interval: number): () => void;
     moveToRegion(region: Region): void;
-    moveToMarker(marker: "previous" | "next"): void;
+    moveToMarker(marker?: Marker): void;
     toggleSendMute(send: Send): void;
     toggleRepeat(): void;
     setSendVolume(send: Send, volume: number): void;
@@ -116,10 +117,15 @@ function serializeRegionMeta(meta: RegionsMeta): string {
 }
 
 export function ReaperProvider(p: ReaperProps) {
-  const [currentTime, setCurrentTime] = createSignal({
-    seconds: 0,
-    beats: "0.0.0",
-  });
+  const [currentTime, setCurrentTime] = createSignal(
+    {
+      seconds: 0,
+      beats: "0.0.0",
+    },
+    {
+      equals: deepEqual,
+    },
+  );
   const [playState, setPlayState] = createSignal(PlayState.Stopped);
   const [repeat, setRepeat] = createSignal(false);
   const [recording, setRecording] = createSignal(false);
@@ -210,10 +216,8 @@ export function ReaperProvider(p: ReaperProps) {
         );
       },
       moveToMarker(marker) {
-        client.run(
-          { type: marker === "previous" ? "PreviousMarker" : "NextMarker" },
-          false,
-        );
+        if (marker == null) return;
+        client.run({ type: "Move", pos: marker.startTime }, false);
       },
       setOutputVolume(id, volume) {
         client.run({ type: "SetTrackVolume", track: id, volume }, true);

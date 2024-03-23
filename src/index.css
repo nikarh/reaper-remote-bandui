@@ -11,13 +11,22 @@
            focus:z-10
            focus:ring-2
            bg-gray-700
-           border-gray-600
-           text-white
-           hover:text-white
+           text-white;
+  }
+
+  .btn-primary:disabled {
+    @apply 
+           bg-gray-800
+           text-gray-600;
+  }
+
+  .btn-primary:not(:disabled) {
+    @apply hover:text-white
            hover:bg-gray-600
            focus:ring-blue-500
            focus:text-white;
   }
+
   .btn-primary.selected {
     @apply text-white
            bg-gray-500;
@@ -30,39 +39,6 @@
            bg-red-500;
   }
 
-  .btn-outlined {
-    @apply appearance-none py-2.5
-           px-5
-           font-medium
-           text-sm
-           focus:outline-none
-           rounded-lg
-           border-2
-           bg-gray-800
-           text-gray-400
-           border-transparent
-           hover:text-white
-           hover:bg-gray-700;
-  }
-
-  .btn-outlined.selected {
-    @apply text-white
-           bg-gray-700
-           z-10
-           border-slate-200;
-  }
-
-  .btn-outlined.playing {
-    @apply border-2 border-emerald-300;
-  }
-
-  .btn-outlined.paused {
-    @apply border-2 border-yellow-600;
-  }
-
-  .btn-outlined.stopped {
-    @apply border-2 border-orange-600;
-  }
 
   .btn-mute {
     @apply py-2.5
@@ -111,7 +87,7 @@
 
   .btn-round:disabled {
     @apply bg-gray-900
-           text-gray-700;
+           text-gray-600;
   }
 
   .btn-round:not(:disabled) {

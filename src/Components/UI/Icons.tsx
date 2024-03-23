@@ -168,7 +168,7 @@ const Right = (p: { class?: string }) => (
 
 const Control = (p: { class?: string }) => (
   <svg
-    class={`mb-1 h-6 w-6 ${p.class}`}
+    class={`h-6 w-6 ${p.class}`}
     aria-hidden="true"
     fill="none"
     stroke="currentColor"
@@ -186,7 +186,7 @@ const Control = (p: { class?: string }) => (
 
 const Mix = (p: { class?: string }) => (
   <svg
-    class={`mb-1 h-6 w-6 ${p.class}`}
+    class={`h-6 w-6 ${p.class}`}
     aria-hidden="true"
     fill="none"
     stroke="currentColor"

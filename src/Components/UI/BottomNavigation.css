@@ -7,7 +7,7 @@
   .bottom-navigation {
     @apply shrink-0 
       w-full 
-      h-16
+      h-12
       flex
       border-t
     bg-gray-700
