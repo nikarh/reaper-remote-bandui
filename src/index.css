@@ -29,7 +29,8 @@
 
   .btn-primary.selected {
     @apply text-white
-           bg-gray-500;
+           bg-gray-500
+           hover:bg-gray-500;
   }
 
   .btn-primary-red.selected {
@@ -37,7 +38,7 @@
            focus:ring-red-700
            border-red-200
            bg-red-500
-           hover:bg-red-600;
+           hover:bg-red-500;
   }
 
 
