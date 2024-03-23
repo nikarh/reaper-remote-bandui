@@ -37,6 +37,10 @@ export interface Marker {
   color?: string;
 }
 
+export interface NavigationMarker extends Marker {
+  kind: "regionStart" | "marker";
+}
+
 export interface RegionMeta {
   id: number;
   index: number;

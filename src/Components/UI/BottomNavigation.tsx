@@ -12,12 +12,12 @@ export function BottomNavigation<Item>(p: BottomNavigationProps<Item>) {
   return (
     <div class="bottom-navigation">
       <div class="mx-auto h-full max-w-lg grow">
-        <div class="grid h-full auto-cols-auto grid-flow-col">
+        <div class="grid h-full auto-cols-auto grid-flow-col text-xs">
           <For each={p.items}>
             {(item) => (
               <button
                 type="button"
-                class={p.selected === item[0] ? "selected" : ""}
+                classList={{ selected: p.selected === item[0] }}
                 onClick={() => p.onSelect(item[0])}
               >
                 {item[1]}

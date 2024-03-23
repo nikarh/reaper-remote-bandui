@@ -1,22 +1,23 @@
-import {
-  For,
-  Match,
-  Switch,
-  createMemo,
-  createSelector,
-  createSignal,
-} from "solid-js";
+import { For, createSelector, createSignal } from "solid-js";
 import { useReaper } from "../../Data/Context";
+import {
+  type RegionWithMeta,
+  textColor,
+  useCurrentRegion,
+  useFilteredSortedRegions,
+  useSortedRegions,
+} from "../../Data/Selectors";
 import {
   type CurrentTime,
   type Marker,
   PlayState,
   type Region,
-  type RegionMeta,
   type RegionsMeta,
 } from "../../Data/State";
 import { Icons } from "../UI/Icons";
 import { Toggle } from "../UI/Toggle";
+
+import "./Regions.css";
 
 function progress(region: Region, currentTime: number): number {
   return Math.max(
@@ -52,26 +53,6 @@ function Progress(p: { region: Region; currentTime: CurrentTime }) {
   );
 }
 
-interface RegionWithMeta extends Region {
-  meta?: RegionMeta;
-}
-
-function filterRegions(regions: RegionWithMeta[]): Region[] {
-  return regions.filter((r) => !(r.meta?.disabled ?? false));
-}
-
-function prepareRegions(
-  regions: Region[],
-  meta: RegionsMeta,
-): RegionWithMeta[] {
-  const result = regions.map((r) => ({ ...r, meta: meta[r.id] }));
-  result.sort(
-    (a, b) => (a.meta?.index ?? 10000 + a.id) - (b.meta?.index ?? 10000 + b.id),
-  );
-
-  return result;
-}
-
 function playStateClass(playState: PlayState): string {
   switch (playState) {
     case PlayState.Playing:
@@ -91,120 +72,74 @@ function markerPosition(region: Region, marker: Marker): number {
   );
 }
 
-function textColor(color?: string): "text-white" | "text-black" {
-  if (color == null) {
-    return "text-white";
-  }
-
-  const squareDist =
-    color
-      .match(/^#(..)(..)(..)$/)
-      ?.slice(1)
-      ?.map((c) => Number.parseInt(c, 16) ** 2)
-      ?.reduce((acc, c) => acc + c, 0) ?? 0;
-
-  if (squareDist > (255 * 255 * 3) / 2) {
-    return "text-black";
-  }
-
-  return "text-white";
-}
-
 function RegionList() {
   const {
-    actions: { moveToRegion, moveToMarker },
-    data: { playState, currentTime, regions, regionMeta, regionMarkers },
+    actions: { moveToRegion },
+    data: { playState, currentTime, regionMarkers },
   } = useReaper();
 
-  const isPlaying = createSelector(
-    currentTime,
-    (r: Region, { seconds: t }) =>
-      Math.max(t, 0) >= Math.floor(r.startTime) &&
-      Math.max(t, 0) <= Math.ceil(r.endTime),
-  );
+  const currentRegion = useCurrentRegion();
+  const processedRegions = useFilteredSortedRegions();
 
-  const processedRegions = createMemo(() =>
-    filterRegions(prepareRegions(regions(), regionMeta())),
+  const isPlaying = createSelector(
+    currentRegion,
+    (region: Region, r?: Region) => r?.id === region.id,
   );
 
   return (
-    <div>
-      <div
-        class="flex justify-center rounded-md shadow-sm h-10 mb-4"
-        role="group"
-      >
-        <button
-          class="flex items-center btn-primary border rounded-none rounded-l basis-1/2"
-          type="button"
-          onclick={() => moveToMarker("previous")}
-        >
-          <Icons.Left />
-          <span class="flex-grow">Previous marker</span>
-        </button>
-        <button
-          class="flex items-center btn-primary border border-l-0 rounded-none rounded-r basis-1/2"
-          type="button"
-          onclick={() => moveToMarker("next")}
-        >
-          <span class="flex-grow">Next marker</span>
-          <Icons.Right />
-        </button>
-      </div>
+    <div class="flex flex-col">
+      <For each={processedRegions()}>
+        {(region) => (
+          <button
+            type="button"
+            class={`btn-region relative my-1 flex h-10 grow overflow-clip px-3 ${
+              isPlaying(region) && `selected ${playStateClass(playState())}`
+            }`}
+            style={
+              region.color != null ? { "background-color": region.color } : {}
+            }
+            onClick={() => moveToRegion(region)}
+          >
+            {isPlaying(region) && (
+              <div
+                class="absolute top-0 right-0 bottom-0 left-0 bg-black opacity-40"
+                style={{
+                  width: `${progress(region, currentTime().seconds)}%`,
+                }}
+              />
+            )}
 
-      <div class="flex flex-col">
-        <For each={processedRegions()}>
-          {(region) => (
-            <button
-              type="button"
-              class={`btn-outlined relative my-1 flex h-10 grow overflow-clip px-3 hover:brightness-125 ${
-                isPlaying(region) && `selected ${playStateClass(playState())}`
-              }`}
-              style={
-                region.color != null ? { "background-color": region.color } : {}
-              }
-              onClick={() => moveToRegion(region)}
-            >
-              {isPlaying(region) && (
+            <For each={regionMarkers()[region.id] ?? []}>
+              {(marker) => (
                 <div
-                  class="absolute top-0 right-0 bottom-0 left-0 bg-black opacity-40"
+                  class="absolute top-0 bottom-0 border-l border-solid border-red-600 opacity-50"
                   style={{
-                    width: `${progress(region, currentTime().seconds)}%`,
+                    left: `${markerPosition(region, marker)}%`,
+                    "border-color": marker.color,
                   }}
-                />
-              )}
-
-              <For each={regionMarkers()[region.id] ?? []}>
-                {(marker) => (
+                >
                   <div
-                    class="absolute top-0 bottom-0 border-l border-solid border-red-600 opacity-50"
-                    style={{
-                      left: `${markerPosition(region, marker)}%`,
-                      "border-color": marker.color,
-                    }}
+                    class={`absolute top-[-3px] text-xs bg-red-600 px-1 rounded-br-md ${textColor(
+                      marker.color,
+                    )}`}
+                    style={{ background: marker.color }}
                   >
-                    <div
-                      class={`absolute top-[-3px] text-xs bg-red-600 px-1 rounded-br-md ${textColor(
-                        marker.color,
-                      )}`}
-                      style={{ "background-color": marker.color }}
-                    >
-                      {marker.id}
-                    </div>
+                    {marker.id}
                   </div>
-                )}
-              </For>
-              {isPlaying(region) && (
-                <Progress region={region} currentTime={currentTime()} />
-              )}
-              <div class="absolute top-0 bottom-0 left-0.5 opacity-90 flex justify-center items-center">
-                <div class="rounded-lg bg-neutral-900/40 p-1 font-normal text-base text-gray-200">
-                  {region.id}. {region.name}
                 </div>
+              )}
+            </For>
+            {isPlaying(region) && (
+              <Progress region={region} currentTime={currentTime()} />
+            )}
+            <div class="absolute top-0 bottom-0 left-0.5 opacity-90 flex justify-center items-center">
+              <div class="rounded-lg bg-neutral-900/40 p-1 font-normal text-base text-gray-200">
+                {region.id}. {region.name}
               </div>
-            </button>
-          )}
-        </For>
-      </div>
+            </div>
+          </button>
+        )}
+      </For>
     </div>
   );
 }
@@ -266,12 +201,9 @@ function toggleEnabled(regions: RegionWithMeta[], index: number): RegionsMeta {
 function RegionEditor() {
   const {
     actions: { updateRegionMeta },
-    data: { regions, regionMeta },
   } = useReaper();
 
-  const processedRegions = createMemo(() =>
-    prepareRegions(regions(), regionMeta()),
-  );
+  const processedRegions = useSortedRegions();
 
   return (
     <div class="flex flex-col">
@@ -298,7 +230,7 @@ function RegionEditor() {
             </button>
             <button
               type="button"
-              class={`btn-outlined hover:text-gray-200 hover:bg-gray-600 relative my-1 flex h-10 grow overflow-clip px-3 ${
+              class={`btn-region bg-gray-600 hover:text-gray-200 relative my-1 flex h-10 grow overflow-clip px-3 ${
                 !region.meta?.disabled && "selected"
               }`}
               onclick={() =>

@@ -7,11 +7,11 @@
   .bottom-navigation {
     @apply shrink-0 
       w-full 
-      h-16
+      h-12
       flex
       border-t
     bg-gray-700
-    border-gray-600;
+    border-gray-900;
   }
 
   .bottom-navigation button:not(.selected) {
