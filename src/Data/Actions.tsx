@@ -13,8 +13,9 @@ interface RecordAction {
 
 interface MoveAction {
   type: "Move";
-  pos: number;
-  end?: number;
+  pos?: number;
+  start: number;
+  end: number;
 }
 
 interface SetTrackVolumeAction {
@@ -147,9 +148,9 @@ export function actionsToCommands(actions: Action[]): string {
         case "NextMarker":
           return "40173;TRANSPORT";
         case "Move":
-          return action.end == null
-            ? `SET/POS/${action.pos};40625;TRANSPORT`
-            : `SET/POS/${action.end};40626;SET/POS/${action.pos};40625;TRANSPORT`;
+          return action.pos == null
+            ? `SET/POS/${action.end};40626;SET/POS/${action.start};40625;TRANSPORT`
+            : `SET/POS/${action.end};40626;SET/POS/${action.start};40625;SET/POS/${action.pos};TRANSPORT`;
         case "SetTrackVolume":
           return `SET/TRACK/${action.track}/VOL/${action.volume}`;
         case "SetSendVolume":

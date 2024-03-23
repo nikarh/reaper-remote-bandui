@@ -40,7 +40,7 @@ interface Reaper {
   actions: {
     subscribe(request: string, interval: number): () => void;
     moveToRegion(region: Region): void;
-    moveToMarker(marker?: Marker): void;
+    moveToMarker(marker?: [Marker, Region]): void;
     toggleSendMute(send: Send): void;
     toggleRepeat(): void;
     setSendVolume(send: Send, volume: number): void;
@@ -211,13 +211,22 @@ export function ReaperProvider(p: ReaperProps) {
       },
       moveToRegion(region) {
         client.run(
-          { type: "Move", pos: region.startTime, end: region.endTime },
+          { type: "Move", start: region.startTime, end: region.endTime },
           false,
         );
       },
-      moveToMarker(marker) {
-        if (marker == null) return;
-        client.run({ type: "Move", pos: marker.startTime }, false);
+      moveToMarker(markerAndRegion) {
+        if (markerAndRegion == null) return;
+        const [marker, region] = markerAndRegion;
+        client.run(
+          {
+            type: "Move",
+            pos: marker.startTime,
+            start: region.startTime,
+            end: region.endTime,
+          },
+          false,
+        );
       },
       setOutputVolume(id, volume) {
         client.run({ type: "SetTrackVolume", track: id, volume }, true);

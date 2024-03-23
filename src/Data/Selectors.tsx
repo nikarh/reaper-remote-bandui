@@ -115,7 +115,7 @@ export function usePreviousMarker() {
     data: { currentTime },
   } = useReaper();
 
-  return createMemo(() => {
+  return createMemo<[NavigationMarker, Region] | undefined>(() => {
     const current = currentRegion();
     const markers = navigationMarkers();
     const regions = allRegions();
@@ -130,11 +130,19 @@ export function usePreviousMarker() {
     );
 
     if (previousMarkerInRegion != null) {
-      return previousMarkerInRegion;
+      return [previousMarkerInRegion, current];
     }
 
     const previous = regions[regions.findIndex((r) => r.id === current.id) - 1];
-    return (markers[previous?.id] ?? []).slice(-1)[0];
+    const lastMarkerInPreviousRegion = (markers[previous?.id] ?? []).slice(
+      -1,
+    )[0];
+
+    if (lastMarkerInPreviousRegion == null) {
+      return undefined;
+    }
+
+    return [lastMarkerInPreviousRegion, previous];
   });
 }
 
@@ -169,7 +177,7 @@ export function useNextMarker() {
     data: { currentTime },
   } = useReaper();
 
-  return createMemo(() => {
+  return createMemo<[NavigationMarker, Region] | undefined>(() => {
     const current = currentRegion();
     const markers = navigationMarkers();
     const regions = allRegions();
@@ -184,7 +192,7 @@ export function useNextMarker() {
     );
 
     if (nextMarkerInRegion != null) {
-      return nextMarkerInRegion;
+      return [nextMarkerInRegion, current];
     }
 
     const currentIndex = regions.findIndex((r) => r.id === current.id);
@@ -193,7 +201,13 @@ export function useNextMarker() {
     }
 
     const next = regions[currentIndex + 1];
-    return (markers[next?.id] ?? [])[0];
+    const firstMarkerInNextRegion = (markers[next?.id] ?? [])[0];
+
+    if (firstMarkerInNextRegion == null) {
+      return undefined;
+    }
+
+    return [firstMarkerInNextRegion, next];
   });
 }
 
