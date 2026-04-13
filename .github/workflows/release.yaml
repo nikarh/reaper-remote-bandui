@@ -31,7 +31,7 @@ jobs:
       - run: npm run build
       - run: mv dist/index.html dist/remote-bandui.html
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.release.outputs.tag_name }}
           files: |
