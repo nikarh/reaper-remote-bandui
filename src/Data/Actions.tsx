@@ -93,14 +93,17 @@ export function reduceActions(actions: Action[]): Action[] {
         trackVolume[action.track] = action;
         break;
       case "SetSendVolume":
+        // The latest volume of each send wins.
         sendVolume[action.track] = {
-          [action.send]: action,
           ...(sendVolume[action.track] ?? {}),
+          [action.send]: action,
         };
         break;
       case "ToggleSendMute":
+        // Two toggles of the same send cancel out.
         sendMutes[action.track] = {
-          [action.send]: !(sendVolume[action.track] ?? false),
+          ...(sendMutes[action.track] ?? {}),
+          [action.send]: !(sendMutes[action.track]?.[action.send] ?? false),
         };
         break;
       default:

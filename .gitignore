@@ -3,3 +3,5 @@ dist
 media
 Mother Project.RPP-bak
 .vscode
+test-results
+playwright-report

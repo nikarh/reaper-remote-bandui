@@ -1,90 +1,10 @@
-import { createSignal } from "solid-js";
-import type { JSX } from "solid-js/jsx-runtime";
+import { gainToDb } from "../../Data/FaderLaw";
 import type { Send, Track } from "../../Data/State";
-import { Range } from "../UI/Range";
+import { Fader } from "../UI/Fader";
 
-function levelToPercentage(level: number): number {
-  return Math.max(0, Math.min(100, dbToNormalized(level / 10) * 100));
-}
-
-function normalizedToDb(level: number): number {
-  if (level < 0.00000002980232) {
-    return Number.NEGATIVE_INFINITY;
-  }
-  return Math.log(level) * 8.68588963806;
-}
-
-function dbToNormalized(level: number): number {
-  if (level === Number.NEGATIVE_INFINITY) {
-    return 0;
-  }
-  return Math.exp(level / 8.68588963806);
-}
-
-function Level(p: { level: number; color: string }) {
-  return (
-    <div class="h-1 w-full bg-gray-200 bg-gray-600/50">
-      <div
-        class="h-full rounded-full"
-        style={{
-          width: `${p.level}%`,
-          "background-color": p.color,
-          filter: "invert(0.9)",
-        }}
-      />
-    </div>
-  );
-}
-
-interface SliderProps {
-  label?: JSX.Element;
-  value: number;
-  color?: string;
-  onChange(value: number): void;
-  peak: number;
-}
-
-function Slider(p: SliderProps) {
-  const [input, setInput] = createSignal<number | undefined>(undefined);
-
-  return (
-    <div class="relative flex grow overflow-clip rounded-lg">
-      <Range
-        min={0}
-        max={1}
-        step={0.01}
-        value={p.value}
-        onChange={(value) => {
-          p.onChange(value);
-          setInput(undefined);
-        }}
-        onInput={setInput}
-        color={p.color}
-      />
-      {p.label != null && (
-        <div class="pointer-events-none absolute top-0.5 bottom-0 left-0.5 opacity-70">
-          <div class="rounded-lg bg-neutral-900/40 p-1 font-normal text-gray-200">
-            {p.label}
-          </div>
-        </div>
-      )}
-
-      <div class="pointer-events-none absolute top-0 right-2 bottom-0 flex items-center opacity-70">
-        <p
-          class={`text-white text-xs ${
-            input() != null ? "text-gray-400" : ""
-          } rounded-lg bg-neutral-900/40 p-1 font-mono`}
-        >
-          {input() == null && normalizedToDb(p.value).toFixed(2)}
-          {input() != null && normalizedToDb(input() ?? 0).toFixed(2)} dB
-        </p>
-      </div>
-
-      <div class="pointer-events-none absolute right-0 bottom-0 left-0">
-        <Level level={p.peak} color={p.color ?? "red"} />
-      </div>
-    </div>
-  );
+/** REAPER reports meter peaks in dB * 10, -1500 for silence. */
+function peakDb(peak: number): number {
+  return peak <= -1500 ? Number.NEGATIVE_INFINITY : peak / 10;
 }
 
 interface SendControlProps {
@@ -97,15 +17,19 @@ interface SendControlProps {
 export function SendControl(p: SendControlProps) {
   return (
     <div class="my-3 flex rounded-lg border-gray-700 bg-gray-800 p-2 shadow-sm">
-      <Slider
+      <Fader
         label={
           <>
             {p.track.name} <span class="text-gray-400">({p.track.id})</span>
           </>
         }
-        value={p.send.volume}
+        gain={p.send.volume}
         onChange={p.onVolumeChange}
-        peak={levelToPercentage(p.track.peakVolume) * p.send.volume}
+        meterDb={
+          p.send.mute
+            ? Number.NEGATIVE_INFINITY
+            : peakDb(p.track.peakVolume) + gainToDb(p.send.volume)
+        }
         color={p.track.color}
       />
       <button
@@ -139,10 +63,10 @@ export function OutputControl(p: OutputControlProps) {
         </div>
       </div>
 
-      <Slider
-        value={p.track.volume}
+      <Fader
+        gain={p.track.volume}
         onChange={p.onVolumeChange}
-        peak={levelToPercentage(p.track.peakVolume)}
+        meterDb={peakDb(p.track.peakVolume)}
         color={p.track.color}
       />
     </div>

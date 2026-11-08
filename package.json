@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:mock": "vite --mode mock",
     "check": "biome check .",
     "tsc": "tsc --noEmit",
     "build": "vite build",
     "serve": "vite preview",
+    "test:e2e": "playwright test",
     "fix": "biome check --write ."
   },
   "license": "MIT",
