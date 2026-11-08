@@ -1,10 +1,19 @@
 # reaper-remote-bandui
 
 [![License](https://img.shields.io/github/license/nikarh/reaper-remote-bandui.svg)](https://github.com/nikarh/reaper-remote-bandui)
-[![GitHub Actions Build Status](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yaml/badge.svg)](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/release.yaml)
+[![CI](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/ci.yml/badge.svg)](https://github.com/nikarh/reaper-remote-bandui/actions/workflows/ci.yml)
 [![Current Release](https://img.shields.io/github/release/nikarh/reaper-remote-bandui.svg)](https://github.com/nikarh/reaper-remote-bandui/releases)
 [![Release RSS Feed](https://img.shields.io/badge/rss-releases-ffa500?logo=rss)](https://github.com/nikarh/reaper-remote-bandui/releases.atom)
 [![Main Commits RSS Feed](https://img.shields.io/badge/rss-commits-ffa500?logo=rss)](https://github.com/nikarh/reaper-remote-bandui/commits/main.atom)
+
+> [!IMPORTANT]
+> **This project is deprecated.** I'm not planning to maintain it anymore: no new features, and issues and pull
+> requests are unlikely to get attention. It keeps working as it is, and the latest release stays available.
+>
+> Its successor is **[BandControl for REAPER](https://github.com/nikarh/reaper-bandcontrol)**, which I use, support
+> and keep improving. It does what this UI does (playback, setlist, a personal in-ear mix for every band member) and
+> more, with a REAPER extension and a phone app (Android for now) that talk over Bluetooth, so no Wi-Fi network or web
+> server is needed.
 
 My musical band uses an IEM setup for rehearsals and live shows.
 This setup is based on a [USB audio interface](https://www.behringer.com/product.html?modelCode=P0B2J) and software mixing in [REAPER](https://www.reaper.fm/).
@@ -47,8 +56,12 @@ The built HTML file will be in `./dist/index.html`.
 
 ### Development
 
-This project does not have a mock backend, so you actually need to run REAPER with the provided `Mother Project`, if you want to see anything sensible.
-By default proxy server expects REAPER to be running on port `8080`.
+`npm run dev` proxies REAPER's web interface from `127.0.0.1:8080`, so run REAPER with the provided `Mother Project`
+and a web interface on that port.
+
+`npm run dev:mock` answers the requests itself with a fake REAPER (`mock/reaper.ts`) instead, and so do the end-to-end
+tests: `npx playwright install chromium`, then `npm run test:e2e` (or point `PLAYWRIGHT_CHROMIUM` at an installed
+Chromium instead of downloading one).
 
 ## REAPER project layout
 
