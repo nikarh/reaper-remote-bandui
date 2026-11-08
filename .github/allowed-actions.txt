@@ -1,0 +1,5 @@
+# Third party actions the workflows may use (as in `uses:`, without the @ref), besides GitHub's own (actions/*). The
+# repository's Actions settings allow GitHub's actions, verified creators and exactly these; scripts/check-actions.sh
+# fails when a workflow uses anything else, or refers to an action by anything but a full commit SHA.
+#
+# None at the moment.

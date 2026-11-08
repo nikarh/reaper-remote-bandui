@@ -1,0 +1,91 @@
+name: Auto-merge
+
+# Merges Dependabot's pull requests once every required check is green, so nobody has to.
+# Runs when CI finishes on a pull request, and every 6 hours in case a run was missed.
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+  schedule:
+    - cron: "30 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  # GITHUB_TOKEN cannot merge PRs that touch .github/workflows/ without this.
+  actions: write
+
+concurrency:
+  group: auto-merge
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    name: Merge green Dependabot PRs
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.event == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Merge green Dependabot PRs
+        env:
+          # Optional fine-grained PAT (Contents + Pull requests + Workflows: write)
+          # as a fallback if GITHUB_TOKEN is refused for workflow file changes.
+          GH_TOKEN: ${{ secrets.DEPENDABOT_MERGE_TOKEN || github.token }}
+          GH_REPO: ${{ github.repository }}
+          # The same as the required checks of the main branch ruleset.
+          REQUIRED_CHECKS: |
+            lint, types, build
+            e2e tests
+            dependency audit
+            dependency review
+        run: |
+          set -euo pipefail
+
+          prs=$(gh pr list --state open --base main \
+            --json number,headRefOid,isDraft,mergeable,mergeStateStatus,author)
+
+          jq -c '.[] | select(.isDraft | not) | select(.author.login == "app/dependabot")' <<<"$prs" | while IFS= read -r pr; do
+            number=$(jq -r .number <<<"$pr")
+            sha=$(jq -r .headRefOid <<<"$pr")
+            mergeable=$(jq -r .mergeable <<<"$pr")
+            state=$(jq -r .mergeStateStatus <<<"$pr")
+            echo "::group::PR #$number ($sha, mergeable=$mergeable, state=$state)"
+
+            if [[ "$mergeable" == "CONFLICTING" || "$state" == "DIRTY" ]]; then
+              echo "Has conflicts; Dependabot rebases it itself."
+              echo "::endgroup::"
+              continue
+            fi
+
+            runs=$(gh api --paginate "repos/$GH_REPO/commits/$sha/check-runs?per_page=100" \
+              --jq '.check_runs[] | {name, status, conclusion}' | jq -s .)
+
+            missing=0
+            while IFS= read -r check; do
+              [[ -z "$check" ]] && continue
+              if ! jq -e --arg n "$check" 'any(.[]; .name == $n)' <<<"$runs" >/dev/null; then
+                echo "Required check '$check' has not reported yet."
+                missing=1
+              fi
+            done <<<"$REQUIRED_CHECKS"
+
+            pending=$(jq '[.[] | select(.status != "completed")] | length' <<<"$runs")
+            failed=$(jq '[.[] | select(.status == "completed" and (.conclusion | IN("success", "neutral", "skipped") | not))] | length' <<<"$runs")
+            statuses=$(gh api "repos/$GH_REPO/commits/$sha/status" --jq 'if .total_count == 0 then "success" else .state end')
+
+            if (( missing || pending || failed )) || [[ "$statuses" != "success" ]]; then
+              echo "Not ready: missing=$missing pending=$pending failed=$failed statuses=$statuses"
+              echo "::endgroup::"
+              continue
+            fi
+
+            echo "All checks green, merging."
+            if gh pr merge "$number" --squash --match-head-commit "$sha"; then
+              # Merges made with GITHUB_TOKEN don't trigger push workflows.
+              gh workflow run ci.yml --ref main
+            else
+              echo "::warning::Failed to merge PR #$number"
+            fi
+            echo "::endgroup::"
+          done

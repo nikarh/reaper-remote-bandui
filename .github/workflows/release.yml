@@ -1,0 +1,56 @@
+name: Release
+
+# Tags the current main with the next version and publishes the built UI as a GitHub release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: choice
+        description: Version update
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run tsc
+      - run: npm run build
+      - run: mv dist/index.html dist/remote-bandui.html
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUMP: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          last=$(gh release view --json tagName --jq .tagName 2>/dev/null || echo v0.0.0)
+          IFS=. read -r major minor patch <<<"${last#v}"
+          case "$BUMP" in
+            major) tag="v$((major + 1)).0.0" ;;
+            minor) tag="v$major.$((minor + 1)).0" ;;
+            patch) tag="v$major.$minor.$((patch + 1))" ;;
+          esac
+          echo "Releasing $tag (after $last)"
+          gh release create "$tag" --target "$GITHUB_SHA" --title "$tag" --generate-notes \
+            dist/remote-bandui.html "Mother Project.RPP" LICENSE
