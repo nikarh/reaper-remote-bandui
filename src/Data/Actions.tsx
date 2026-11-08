@@ -120,7 +120,7 @@ export function reduceActions(actions: Action[]): Action[] {
           ([send]) =>
             ({
               type: "ToggleSendMute",
-              track: Number.parseInt(track),
+              track: Number.parseInt(track, 10),
               send,
             }) as ToggleSendMuteAction,
         ),
@@ -129,37 +129,37 @@ export function reduceActions(actions: Action[]): Action[] {
   ];
 }
 
+function actionToCommand(action: Action): string {
+  switch (action.type) {
+    case "Play":
+      return "1007;TRANSPORT";
+    case "Pause":
+      return "1008;TRANSPORT";
+    case "Stop":
+      return "40667;TRANSPORT";
+    case "Record":
+      return "1013;TRANSPORT";
+    case "ToggleRepeat":
+      return "1068;TRANSPORT";
+    case "PreviousMarker":
+      return "40172;TRANSPORT";
+    case "NextMarker":
+      return "40173;TRANSPORT";
+    case "Move":
+      return action.pos == null
+        ? `SET/POS/${action.end};40626;SET/POS/${action.start};40625;TRANSPORT`
+        : `SET/POS/${action.end};40626;SET/POS/${action.start};40625;SET/POS/${action.pos};TRANSPORT`;
+    case "SetTrackVolume":
+      return `SET/TRACK/${action.track}/VOL/${action.volume}`;
+    case "SetSendVolume":
+      return `SET/TRACK/${action.track}/SEND/${action.send}/VOL/${action.volume}`;
+    case "ToggleSendMute":
+      return `SET/TRACK/${action.track}/SEND/${action.send}/MUTE/-1`;
+    case "SetRegionsMeta":
+      return `SET/PROJEXTSTATE/BANDUI/regions/${action.value}`;
+  }
+}
+
 export function actionsToCommands(actions: Action[]): string {
-  return actions
-    .map((action) => {
-      switch (action.type) {
-        case "Play":
-          return "1007;TRANSPORT";
-        case "Pause":
-          return "1008;TRANSPORT";
-        case "Stop":
-          return "40667;TRANSPORT";
-        case "Record":
-          return "1013;TRANSPORT";
-        case "ToggleRepeat":
-          return "1068;TRANSPORT";
-        case "PreviousMarker":
-          return "40172;TRANSPORT";
-        case "NextMarker":
-          return "40173;TRANSPORT";
-        case "Move":
-          return action.pos == null
-            ? `SET/POS/${action.end};40626;SET/POS/${action.start};40625;TRANSPORT`
-            : `SET/POS/${action.end};40626;SET/POS/${action.start};40625;SET/POS/${action.pos};TRANSPORT`;
-        case "SetTrackVolume":
-          return `SET/TRACK/${action.track}/VOL/${action.volume}`;
-        case "SetSendVolume":
-          return `SET/TRACK/${action.track}/SEND/${action.send}/VOL/${action.volume}`;
-        case "ToggleSendMute":
-          return `SET/TRACK/${action.track}/SEND/${action.send}/MUTE/-1`;
-        case "SetRegionsMeta":
-          return `SET/PROJEXTSTATE/BANDUI/regions/${action.value}`;
-      }
-    })
-    .join(";");
+  return actions.map(actionToCommand).join(";");
 }

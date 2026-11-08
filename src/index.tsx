@@ -1,10 +1,12 @@
 /// <reference types="vite/client" />
 
 /* @refresh reload */
-import { render } from "solid-js/web";
-
-import App from "./App";
+// First, so that Tailwind's cascade layers are declared in its order (theme, base, components, utilities) before the
+// components' stylesheets add to them.
 import "./index.css";
+
+import { render } from "solid-js/web";
+import App from "./App";
 
 import favicon from "./favicon-32x32.png";
 

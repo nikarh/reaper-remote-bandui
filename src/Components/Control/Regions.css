@@ -1,30 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@reference "tailwindcss";
 
 @layer components {
   button.btn-region {
-    @apply appearance-none
-           py-2.5
-           px-5
-           font-medium
-           text-sm
-           focus:outline-none
-           rounded-lg
-           border-2
-           border-transparent
-           brightness-75
-           bg-gray-800
-           text-gray-400
-           hover:brightness-100;
+    @apply appearance-none py-2.5 px-5 font-medium text-sm focus:outline-hidden rounded-lg border-2 border-transparent brightness-75 bg-gray-800 text-gray-400 hover:brightness-100;
   }
 
   .btn-region.selected {
-    @apply text-white
-           z-10
-           border-slate-200
-           brightness-125
-           hover:brightness-[135%];
+    @apply text-white z-10 border-slate-200 brightness-125 hover:brightness-[135%];
   }
 
   .btn-region.playing {

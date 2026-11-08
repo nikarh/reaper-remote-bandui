@@ -1,7 +1,7 @@
 {
   "name": "reaper-remote-bandui",
   "version": "0.0.0",
-  "description": "",
+  "description": "Web UI for REAPER's remote control interface, to mix and control playback from phones in a band (deprecated, see reaper-bandcontrol)",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,23 +9,26 @@
     "tsc": "tsc --noEmit",
     "build": "vite build",
     "serve": "vite preview",
-    "fix": "biome check --apply ."
+    "fix": "biome check --write ."
   },
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "1.6.1",
-    "@types/deep-equal": "^1.0.1",
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
-    "postcss-input-range": "^5.0.0",
-    "tailwindcss": "^3.2.6",
-    "typescript": "^5.0.2",
-    "vite": "^6.4.1",
-    "vite-plugin-singlefile": "^2.2.0",
-    "vite-plugin-solid": "^2.11.6"
+    "@biomejs/biome": "^2.6.6",
+    "@playwright/test": "^1.65.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/deep-equal": "^1.0.4",
+    "@types/node": "^24.19.2",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vite-plugin-solid": "^2.11.15"
   },
   "dependencies": {
-    "deep-equal": "^2.2.0",
-    "solid-js": "^1.9.5"
+    "deep-equal": "^2.2.3",
+    "solid-js": "^1.9.18"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

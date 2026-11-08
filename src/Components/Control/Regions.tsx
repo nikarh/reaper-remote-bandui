@@ -1,4 +1,4 @@
-import { For, createSelector, createSignal } from "solid-js";
+import { createSelector, createSignal, For } from "solid-js";
 import { useReaper } from "../../Data/Context";
 import {
   type RegionWithMeta,
@@ -42,14 +42,12 @@ function time(totalSeconds: number): string {
 
 function Progress(p: { region: Region; currentTime: CurrentTime }) {
   return (
-    <>
-      <div class="absolute top-0 right-0 bottom-0 flex items-center px-1 opacity-90">
-        <p class="rounded-lg bg-neutral-900/40 p-1 font-mono text-gray-300 text-xs">
-          {time(p.currentTime.seconds - p.region.startTime)} /{" "}
-          {time(p.region.endTime - p.region.startTime)}
-        </p>
-      </div>
-    </>
+    <div class="absolute top-0 right-0 bottom-0 flex items-center px-1 opacity-90">
+      <p class="rounded-lg bg-neutral-900/40 p-1 font-mono text-gray-300 text-xs">
+        {time(p.currentTime.seconds - p.region.startTime)} /{" "}
+        {time(p.region.endTime - p.region.startTime)}
+      </p>
+    </div>
   );
 }
 

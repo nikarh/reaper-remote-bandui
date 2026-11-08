@@ -1,5 +1,6 @@
 import { createEffect, createSignal } from "solid-js";
 import "./Range.css";
+
 interface RangeProps {
   min: number;
   max: number;

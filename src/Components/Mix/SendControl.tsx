@@ -96,7 +96,7 @@ interface SendControlProps {
 
 export function SendControl(p: SendControlProps) {
   return (
-    <div class="my-3 flex rounded-lg border-gray-700 bg-gray-800 p-2 shadow">
+    <div class="my-3 flex rounded-lg border-gray-700 bg-gray-800 p-2 shadow-sm">
       <Slider
         label={
           <>
@@ -128,7 +128,7 @@ interface OutputControlProps {
 
 export function OutputControl(p: OutputControlProps) {
   return (
-    <div class="mb-3 rounded-lg border border-gray-700 bg-gray-700 p-2 shadow">
+    <div class="mb-3 rounded-lg border border-gray-700 bg-gray-700 p-2 shadow-sm">
       <div class="mb-1 flex font-normal text-gray-400">
         <div class="flex-1">
           <b>Output:</b> {p.track.name}{" "}

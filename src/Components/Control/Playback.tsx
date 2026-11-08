@@ -49,7 +49,7 @@ function Progress() {
   const marker = useCurrentMarker();
 
   return (
-    <div class="flex flex-col flex-grow content-center justify-center text-center bg-gray-800 brightness-110">
+    <div class="flex flex-col grow content-center justify-center text-center bg-gray-800 brightness-110">
       <div class="text-sm">
         <CurrentRegion region={region()} />
       </div>
@@ -81,7 +81,7 @@ export function MainControl() {
         >
           <Icons.Record />
         </button>
-        <div class="flex grow justify-center rounded-md" role="group">
+        <div class="flex grow justify-center rounded-md">
           <button
             type="button"
             onClick={play}
@@ -119,10 +119,7 @@ export function MainControl() {
           <Icons.Repeat />
         </button>
       </div>
-      <div
-        class="flex justify-center rounded-md shadow-sm h-10 mb-4"
-        role="group"
-      >
+      <div class="flex justify-center rounded-md shadow-xs h-10 mb-4">
         <button
           class="flex items-center btn-primary rounded-none rounded-l"
           type="button"

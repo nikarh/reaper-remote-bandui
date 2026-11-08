@@ -1,22 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind screens;
+@reference "tailwindcss";
 
 @layer components {
   .bottom-navigation {
-    @apply shrink-0 
-      w-full 
-      h-12
-      flex
-      border-t
-    bg-gray-700
-    border-gray-900;
+    @apply shrink-0 w-full h-12 flex border-t bg-gray-700 border-gray-900;
   }
 
   .bottom-navigation button:not(.selected) {
-    @apply text-gray-400
-      hover:text-blue-500;
+    @apply text-gray-400 hover:text-blue-500;
   }
 
   .bottom-navigation button {
@@ -24,7 +14,6 @@
   }
 
   .bottom-navigation button.selected {
-    @apply text-blue-500
-    bg-gray-800;
+    @apply text-blue-500 bg-gray-800;
   }
 }

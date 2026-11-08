@@ -14,7 +14,7 @@ export function Select<T>(p: SelectProps<T>) {
     <select
       class="block w-full rounded-lg border border-gray-600 bg-gray-700 p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
       onChange={(e) =>
-        p.onChange(Number.parseInt((e.target as HTMLSelectElement).value))
+        p.onChange(Number.parseInt((e.target as HTMLSelectElement).value, 10))
       }
     >
       <For each={p.options}>

@@ -1,108 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@layer base {
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 @layer components {
   .btn-primary {
-    @apply px-4
-           py-2
-           text-sm
-           font-medium
-           focus:z-10
-           focus:ring-2
-           bg-gray-700
-           text-white;
+    @apply px-4 py-2 text-sm font-medium focus:z-10 focus:ring-2 bg-gray-700 text-white;
   }
 
   .btn-primary:disabled {
-    @apply 
-           bg-gray-800
-           text-gray-600;
+    @apply bg-gray-800 text-gray-600;
   }
 
   .btn-primary:not(:disabled) {
-    @apply hover:text-white
-           hover:bg-gray-600
-           focus:ring-blue-500
-           focus:text-white;
+    @apply hover:text-white hover:bg-gray-600 focus:ring-blue-500 focus:text-white;
   }
 
   .btn-primary.selected {
-    @apply text-white
-           bg-gray-500
-           hover:bg-gray-500;
+    @apply text-white bg-gray-500 hover:bg-gray-500;
   }
 
   .btn-primary-red.selected {
-    @apply text-white
-           focus:ring-red-700
-           border-red-200
-           bg-red-500
-           hover:bg-red-500;
+    @apply text-white focus:ring-red-700 border-red-200 bg-red-500 hover:bg-red-500;
   }
 
-
   .btn-mute {
-    @apply py-2.5
-           px-5
-           font-medium
-           text-sm
-           focus:outline-none
-           rounded-lg
-           border
-           focus:z-10
-           focus:ring-4
-           focus:ring-gray-700
-           bg-gray-800
-           text-gray-400
-           border-gray-600
-           hover:text-white
-           hover:bg-gray-700;
+    @apply py-2.5 px-5 font-medium text-sm focus:outline-hidden rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700;
   }
 
   .btn-mute-red {
-    @apply py-2.5
-           px-5
-           font-medium
-           text-sm
-           focus:outline-none
-           text-white
-           focus:ring-4
-           rounded-lg
-           border
-           border-gray-600
-           hover:border-gray-600
-           bg-red-600
-           hover:bg-red-700
-           focus:ring-red-900;
+    @apply py-2.5 px-5 font-medium text-sm focus:outline-hidden text-white focus:ring-4 rounded-lg border border-gray-600 hover:border-gray-600 bg-red-600 hover:bg-red-700 focus:ring-red-900;
   }
 
   .btn-round {
-    @apply py-1
-           px-1
-           font-medium
-           text-sm
-           rounded-lg
-           bg-gray-800
-           text-gray-400;
+    @apply py-1 px-1 font-medium text-sm rounded-lg bg-gray-800 text-gray-400;
   }
 
   .btn-round:disabled {
-    @apply bg-gray-900
-           text-gray-600;
+    @apply bg-gray-900 text-gray-600;
   }
 
   .btn-round:not(:disabled) {
-    @apply hover:text-white
-           hover:bg-gray-700
-           focus:z-10
-           focus:ring-4
-           focus:ring-gray-700
-           focus:outline-none;
+    @apply hover:text-white hover:bg-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-700 focus:outline-hidden;
   }
 
   .btn-round.selected {
-    @apply text-white
-           bg-gray-700;
+    @apply text-white bg-gray-700;
   }
 }

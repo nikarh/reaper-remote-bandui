@@ -11,11 +11,11 @@ export function initializeClient(
 ): [Subscription, () => void] {
   let unmount = false;
   let ignoreResults = false;
-  let delaySubscriptions: number | undefined = undefined;
+  let delaySubscriptions: number | undefined;
 
   const subscriptions: [string, number, number][] = [];
   let actionQueue: Action[] = [];
-  let timer: number | undefined = undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
 
   let promises = Promise.resolve();
 
@@ -27,7 +27,7 @@ export function initializeClient(
       const text = await result.text();
       if (!unmount) {
         onReply(text);
-        delaySubscriptions = new Date().getTime() + 50;
+        delaySubscriptions = Date.now() + 50;
       }
     }
 
@@ -36,7 +36,7 @@ export function initializeClient(
 
   async function runSubscriptions() {
     let commands = "";
-    const now = new Date().getTime();
+    const now = Date.now();
 
     if (delaySubscriptions == null || now > delaySubscriptions) {
       delaySubscriptions = undefined;
@@ -75,7 +75,7 @@ export function initializeClient(
     const subscription: [string, number, number] = [
       request,
       interval,
-      new Date().getTime(),
+      Date.now(),
     ];
     subscriptions.push(subscription);
     return () => {

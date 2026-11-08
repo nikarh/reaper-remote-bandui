@@ -1,22 +1,21 @@
 import deepEqual from "deep-equal";
 import {
   type Accessor,
-  type JSX,
   createComputed,
   createContext,
   createMemo,
   createSignal,
+  type JSX,
   onCleanup,
   useContext,
 } from "solid-js";
-import { type Store, createStore, produce, reconcile } from "solid-js/store";
+import { createStore, produce, reconcile, type Store } from "solid-js/store";
 
 import { initializeClient } from "./ClientLoop";
 import { onReply } from "./ResponseParser";
 import {
   type CurrentTime,
   type Marker,
-  type NavigationMarker,
   PlayState,
   type Region,
   type RegionsMarkers,

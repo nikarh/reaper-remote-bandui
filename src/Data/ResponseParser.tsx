@@ -20,7 +20,7 @@ interface Setters {
 }
 
 function colorToRgba(color: string): string {
-  const parsed = (Number.parseInt(color) | 0x1000000).toString(16);
+  const parsed = (Number.parseInt(color, 10) | 0x1000000).toString(16);
   return `#${parsed.substring(parsed.length - 6)}`;
 }
 
@@ -65,7 +65,7 @@ export function onReply(
           beats: tokens[4],
         });
 
-        const state = Number.parseInt(tokens[1]);
+        const state = Number.parseInt(tokens[1], 10);
         setPlayState(
           ((state) => {
             if (state & 1) return PlayState.Playing;
@@ -91,7 +91,7 @@ export function onReply(
         const newRegions = regionStrings.map(
           ([_cmd, name, id, startTime, endTime, color]) => ({
             name,
-            id: Number.parseInt(id),
+            id: Number.parseInt(id, 10),
             startTime: Number.parseFloat(startTime),
             endTime: Number.parseFloat(endTime),
             color: color === "0" ? undefined : colorToRgba(color),
@@ -113,7 +113,7 @@ export function onReply(
         const newMarkers = markerStrings.map(
           ([_cmd, name, id, startTime, color]) => ({
             name,
-            id: Number.parseInt(id),
+            id: Number.parseInt(id, 10),
             startTime: Number.parseFloat(startTime),
             color: color === "0" ? undefined : colorToRgba(color),
           }),
@@ -142,12 +142,12 @@ export function onReply(
         ] = tokens;
 
         tracks.push({
-          id: Number.parseInt(id),
+          id: Number.parseInt(id, 10),
           name,
           volume: Number.parseFloat(volume),
           peakVolume: Number.parseFloat(last_meter_peak),
           color: colorToRgba(color),
-          receiveCount: Number.parseInt(receiveCount),
+          receiveCount: Number.parseInt(receiveCount, 10),
           isOutput: hwOutCount !== "0" && receiveCount !== "0",
         });
 
@@ -159,10 +159,10 @@ export function onReply(
 
         sends.push({
           index,
-          trackFrom: Number.parseInt(trackFrom),
-          trackTo: Number.parseInt(trackTo),
+          trackFrom: Number.parseInt(trackFrom, 10),
+          trackTo: Number.parseInt(trackTo, 10),
           volume: Number.parseFloat(volume),
-          mute: (Number.parseInt(flags) & 8) !== 0,
+          mute: (Number.parseInt(flags, 10) & 8) !== 0,
         });
         break;
       }
