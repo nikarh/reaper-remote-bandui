@@ -1,4 +1,4 @@
-import { createSelector, createSignal, For } from "solid-js";
+import { createEffect, createSelector, createSignal, For, on } from "solid-js";
 import { useReaper } from "../../Data/Context";
 import {
   type RegionWithMeta,
@@ -84,13 +84,28 @@ function RegionList() {
     (region: Region, r?: Region) => r?.id === region.id,
   );
 
+  let list: HTMLDivElement | undefined;
+
+  // Keep the current song in view when it changes, e.g. when playback moves on to the next one.
+  createEffect(
+    on(
+      () => currentRegion()?.id,
+      (id) => {
+        if (id == null) return;
+        const element = list?.querySelector(`[data-region-id="${id}"]`);
+        element?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      },
+    ),
+  );
+
   return (
-    <div class="flex flex-col">
+    <div class="flex flex-col" ref={list}>
       <For each={processedRegions()}>
         {(region) => (
           <button
             type="button"
-            class={`btn-region relative my-1 flex h-10 grow overflow-clip px-3 ${
+            data-region-id={region.id}
+            class={`btn-region relative my-1 flex h-10 grow scroll-mt-40 scroll-mb-4 overflow-clip px-3 ${
               isPlaying(region) && `selected ${playStateClass(playState())}`
             }`}
             style={

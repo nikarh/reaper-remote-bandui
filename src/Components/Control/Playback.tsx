@@ -119,7 +119,7 @@ export function MainControl() {
           <Icons.Repeat />
         </button>
       </div>
-      <div class="flex justify-center rounded-md shadow-xs h-10 mb-4">
+      <div class="flex justify-center rounded-md shadow-xs h-10">
         <button
           class="flex items-center btn-primary rounded-none rounded-l"
           type="button"
