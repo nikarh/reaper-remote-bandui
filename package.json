@@ -19,7 +19,7 @@
     "@playwright/test": "^1.65.0",
     "@tailwindcss/vite": "^4.3.5",
     "@types/deep-equal": "^1.0.4",
-    "@types/node": "^24.19.2",
+    "@types/node": "^26.6.6",
     "tailwindcss": "^4.3.5",
     "typescript": "^7.0.2",
     "vite": "^8.3.6",
