@@ -16,3 +16,7 @@ updates:
     groups:
       npm-minor-patch:
         update-types: ["minor", "patch"]
+    ignore:
+      # Node.js is 24 (mise.toml, the workflows): its types follow that, not the newest Node.js.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
