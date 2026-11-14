@@ -15,20 +15,20 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "^2.6.6",
+    "@biomejs/biome": "^2.6.7",
     "@playwright/test": "^1.65.0",
     "@tailwindcss/vite": "^4.3.5",
     "@types/deep-equal": "^1.0.4",
     "@types/node": "^24.19.2",
     "tailwindcss": "^4.3.5",
     "typescript": "^7.0.2",
-    "vite": "^8.3.6",
+    "vite": "^8.3.8",
     "vite-plugin-singlefile": "^2.3.4",
-    "vite-plugin-solid": "^2.11.15"
+    "vite-plugin-solid": "^2.11.16"
   },
   "dependencies": {
     "deep-equal": "^2.2.3",
-    "solid-js": "^1.9.18"
+    "solid-js": "^1.9.19"
   },
   "engines": {
     "node": ">=24"
