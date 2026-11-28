@@ -20,3 +20,7 @@ updates:
       # Node.js is 24 (mise.toml, the workflows): its types follow that, not the newest Node.js.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # Solid 2 needs vite-plugin-solid 3, which is only out as a pre-release (2.x peers solid-js ^1), and reworks the
+      # reactivity APIs this app is built on (effects, `on`, createSelector, stores). Not worth it for a deprecated app.
+      - dependency-name: "solid-js"
+        update-types: ["version-update:semver-major"]
